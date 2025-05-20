@@ -157,3 +157,77 @@ function cat(c, hipo) {
         return null; // Retorna null em caso de erro
     }
 }
+
+// angularController.js
+const express = require('express');
+const router = express.Router();
+
+// Seno
+router.post('/seno', (req, res) => {
+    const { ac, hipo } = req.body;
+    try {
+        let sen;
+        if (hipo === undefined) {
+            sen = Math.sin(ac);
+        } else {
+            sen = ac / hipo;
+        }
+        return res.json({ resultado: parseFloat(sen.toFixed(4)) });
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+});
+
+// Cosseno
+router.post('/cosseno', (req, res) => {
+    const { ac, hipo } = req.body;
+    try {
+        let cos;
+        if (hipo === undefined) {
+            cos = Math.cos(ac);
+        } else {
+            cos = ac / hipo;
+        }
+        return res.json({ resultado: parseFloat(cos.toFixed(4)) });
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+});
+
+// Tangente
+router.post('/tangente', (req, res) => {
+    const { ac, adj } = req.body;
+    try {
+        let tan;
+        if (adj === undefined) {
+            tan = Math.tan(ac);
+        } else {
+            tan = ac / adj;
+        }
+        return res.json({ resultado: parseFloat(tan.toFixed(4)) });
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+});
+
+// Pitágoras - Hipotenusa
+router.post('/hipotenusa', (req, res) => {
+    const { c1, c2 } = req.body;
+    try {
+        return res.json({ resultado: Math.sqrt(c1 * c1 + c2 * c2) });
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+});
+
+// Pitágoras - Cateto
+router.post('/cateto', (req, res) => {
+    const { c, hipo } = req.body;
+    try {
+        return res.json({ resultado: parseFloat(Math.sqrt(hipo * hipo - c * c).toFixed(4)) });
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+});
+
+module.exports = router;

@@ -1,12 +1,13 @@
-//***ANALISE COMBINATÓRIA
+const express = require('express');
+const router = express.Router();
 
 // Permutação
-function permutacao(n, k) {
+router.post('/permutacao', (req, res) => {
+    const { n, k } = req.body;
     try {
         if (typeof n !== "number" || isNaN(n) || !Number.isInteger(n) || n < 0) {
             throw new Error("O valor de 'n' deve ser um número inteiro não negativo.");
         }
-
         if (k !== undefined) {
             if (typeof k !== "number" || isNaN(k) || !Number.isInteger(k) || k < 0) {
                 throw new Error("O valor de 'k' deve ser um número inteiro não negativo.");
@@ -14,22 +15,23 @@ function permutacao(n, k) {
             if (k > n) {
                 throw new Error("O valor de 'k' não pode ser maior que 'n'.");
             }
-
-            return Math.permutations(n, k);
+            let resultado = 1;
+            for (let i = n; i > n - k; i--) resultado *= i;
+            return res.json({ resultado });
         } else {
-            return Math.permutations(n);
+            let resultado = 1;
+            for (let i = 2; i <= n; i++) resultado *= i;
+            return res.json({ resultado });
         }
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
     }
-    catch (error) {
-        console.error("Erro:", error.message);
-        return null;
-    }
-}
+});
 
 // Combinação
-function combinacao(n, k) {
+router.post('/combinacao', (req, res) => {
+    const { n, k } = req.body;
     try {
-        // Verifica se 'n' e 'k' são números inteiros não negativos
         if (typeof n !== "number" || isNaN(n) || !Number.isInteger(n) || n < 0) {
             throw new Error("O valor de 'n' deve ser um número inteiro não negativo.");
         }
@@ -39,18 +41,18 @@ function combinacao(n, k) {
         if (k > n) {
             throw new Error("O valor de 'k' não pode ser maior que 'n'.");
         }
-
-        return Math.combinations(n, k); // Chamada correta da função em math.js
+        let f = x => { let r = 1; for (let i = 2; i <= x; i++) r *= i; return r; };
+        let resultado = f(n) / (f(k) * f(n - k));
+        return res.json({ resultado });
     } catch (error) {
-        console.error("Erro:", error.message);
-        return null; // Retorna null em caso de erro
+        return res.status(400).json({ error: error.message });
     }
-}
+});
 
 // Arranjo
-function arranjo(n, k) {
+router.post('/arranjo', (req, res) => {
+    const { n, k } = req.body;
     try {
-        // Verifica se 'n' e 'k' são números inteiros não negativos
         if (typeof n !== "number" || isNaN(n) || !Number.isInteger(n) || n < 0) {
             throw new Error("O valor de 'n' deve ser um número inteiro não negativo.");
         }
@@ -60,29 +62,29 @@ function arranjo(n, k) {
         if (k > n) {
             throw new Error("O valor de 'k' não pode ser maior que 'n'.");
         }
-
-        // Calcula o arranjo usando Math.js
-        return Math.factorial(n) / Math.factorial(n - k);
+        let f = x => { let r = 1; for (let i = 2; i <= x; i++) r *= i; return r; };
+        let resultado = f(n) / f(n - k);
+        return res.json({ resultado });
     } catch (error) {
-        console.error("Erro:", error.message);
-        return null; // Retorna null em caso de erro
+        return res.status(400).json({ error: error.message });
     }
-}
+});
 
 // Arranjo com repetição
-function arranjoRep(n, k) {
+router.post('/arranjoRep', (req, res) => {
+    const { n, k } = req.body;
     try {
-        // Verifica se 'n' e 'k' são números inteiros não negativos
         if (typeof n !== "number" || isNaN(n) || !Number.isInteger(n) || n <= 0) {
             throw new Error("O valor de 'n' deve ser um número inteiro positivo.");
         }
         if (typeof k !== "number" || isNaN(k) || !Number.isInteger(k) || k < 0) {
             throw new Error("O valor de 'k' deve ser um número inteiro não negativo.");
         }
-
-        return Math.pow(n, k); // Calcula o arranjo com repetição
+        let resultado = Math.pow(n, k);
+        return res.json({ resultado });
     } catch (error) {
-        console.error("Erro:", error.message);
-        return null; // Retorna null em caso de erro
+        return res.status(400).json({ error: error.message });
     }
-}
+});
+
+module.exports = router;
