@@ -23,7 +23,7 @@ Esta API permite realizar operações matemáticas como cálculo de área, volum
    ```
 2. Inicie o servidor:
    ```sh
-   npm start
+   npx nodemon index.js
    ```
    O servidor rodará por padrão em `http://localhost:8081`.
 
