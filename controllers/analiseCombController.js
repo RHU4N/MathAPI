@@ -17,11 +17,17 @@ router.post('/permutacao', (req, res) => {
             }
             let resultado = 1;
             for (let i = n; i > n - k; i--) resultado *= i;
-            return res.json({ resultado });
+            
+            let textResultado = "P" + n + " = " + n + "!\nResultado: " + resultado;
+            
+            return res.json({ textResultado });
         } else {
             let resultado = 1;
             for (let i = 2; i <= n; i++) resultado *= i;
-            return res.json({ resultado });
+
+            let textResultado = "P" + n + " = " + n + "!\nResultado: " + resultado;
+
+            return res.json({ textResultado });
         }
     } catch (error) {
         return res.status(400).json({ error: error.message });
@@ -43,7 +49,10 @@ router.post('/combinacao', (req, res) => {
         }
         let f = x => { let r = 1; for (let i = 2; i <= x; i++) r *= i; return r; };
         let resultado = f(n) / (f(k) * f(n - k));
-        return res.json({ resultado });
+
+        let textResultado = "C" + n + k + " = " + n + "!/[" + k + "!" + "(" + n + " - " + k + ")!]\nResultado: " + resultado;
+
+        return res.json({ textResultado });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
@@ -64,7 +73,10 @@ router.post('/arranjo', (req, res) => {
         }
         let f = x => { let r = 1; for (let i = 2; i <= x; i++) r *= i; return r; };
         let resultado = f(n) / f(n - k);
-        return res.json({ resultado });
+
+        let textResultado = "A" + n + "," + k + " = " + n + "!/(" + n + " - " + k + ")!\nResultado: " + resultado
+        
+        return res.json({ textResultado });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
@@ -81,7 +93,10 @@ router.post('/arranjoRep', (req, res) => {
             throw new Error("O valor de 'k' deve ser um número inteiro não negativo.");
         }
         let resultado = Math.pow(n, k);
-        return res.json({ resultado });
+
+        let textResultado = "AR" + n + "," + k + " = " + n + "^" + k + "\nResultado: " + resultado;
+
+        return res.json({ textResultado });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
