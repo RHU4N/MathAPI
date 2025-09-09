@@ -45,7 +45,10 @@ router.post('/funcao2', (req, res) => {
             }
             let xNeg = (-b - Math.sqrt(delta)) / (2 * a);
             let xPos = (-b + Math.sqrt(delta)) / (2 * a);
-            return res.json({ resultado: [xNeg, xPos] });
+
+            let textResultado = "Δ = " + b + "² - 4" + a + c + "\nΔ = " + delta + "\nx = [-(" + b + ") ∓ √" + delta + "]/2" + a + "\nx positivo: " + xPos + "\nx negativo: " + xNeg
+
+            return res.json({ resultado: textResultado });
         }
     } catch (error) {
         return res.status(400).json({ error: error.message });
