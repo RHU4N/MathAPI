@@ -20,7 +20,7 @@ router.post('/permutacao', (req, res) => {
             
             let textResultado = "P" + n + " = " + n + "!\nResultado: " + resultado;
             
-            return res.json({ textResultado });
+            return res.json({ resultado: textResultado });
         } else {
             let resultado = 1;
             for (let i = 2; i <= n; i++) resultado *= i;
