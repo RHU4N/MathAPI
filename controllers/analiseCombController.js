@@ -27,7 +27,7 @@ router.post('/permutacao', (req, res) => {
 
             let textResultado = "P" + n + " = " + n + "!\nResultado: " + resultado;
 
-            return res.json({ textResultado });
+            return res.json({ resultado: textResultado });
         }
     } catch (error) {
         return res.status(400).json({ error: error.message });
@@ -52,7 +52,7 @@ router.post('/combinacao', (req, res) => {
 
         let textResultado = "C" + n + k + " = " + n + "!/[" + k + "!" + "(" + n + " - " + k + ")!]\nResultado: " + resultado;
 
-        return res.json({ textResultado });
+        return res.json({ resultado: textResultado });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
@@ -76,7 +76,7 @@ router.post('/arranjo', (req, res) => {
 
         let textResultado = "A" + n + "," + k + " = " + n + "!/(" + n + " - " + k + ")!\nResultado: " + resultado
         
-        return res.json({ textResultado });
+        return res.json({ resultado: textResultado });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
@@ -96,7 +96,7 @@ router.post('/arranjoRep', (req, res) => {
 
         let textResultado = "AR" + n + "," + k + " = " + n + "^" + k + "\nResultado: " + resultado;
 
-        return res.json({ textResultado });
+        return res.json({ resultado: textResultado });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
