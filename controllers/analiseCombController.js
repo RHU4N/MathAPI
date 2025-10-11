@@ -18,14 +18,14 @@ router.post('/permutacao', (req, res) => {
             let resultado = 1;
             for (let i = n; i > n - k; i--) resultado *= i;
             
-            let textResultado = "P" + n + " = " + n + "!\nResultado: " + resultado;
+            let textResultado = "P" + n + " = " + n + "! = " + resultado;
             
             return res.json({ resultado: textResultado });
         } else {
             let resultado = 1;
             for (let i = 2; i <= n; i++) resultado *= i;
 
-            let textResultado = "P" + n + " = " + n + "!\nResultado: " + resultado;
+            let textResultado = "P" + n + " = " + n + "! = " + resultado;
 
             return res.json({ resultado: textResultado });
         }
