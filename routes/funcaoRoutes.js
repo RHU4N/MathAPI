@@ -1,10 +1,13 @@
 const express = require('express');
+
+// Factory: createFuncaoRouter({ useCase, repository })
 const CalculateFuncaoUseCase = require('../domain/usecases/CalculateFuncaoUseCase');
 const FuncaoRepository = require('../infrastructure/repositories/FuncaoRepository');
 
-const router = express.Router();
-const funcaoUseCase = new CalculateFuncaoUseCase();
-const funcaoRepository = new FuncaoRepository();
+function createFuncaoRouter(deps = {}) {
+    const router = express.Router();
+    const funcaoUseCase = deps.useCase || new CalculateFuncaoUseCase();
+    const funcaoRepository = deps.repository || new FuncaoRepository();
 
 /**
  * @openapi
@@ -91,6 +94,21 @@ router.post('/:tipo', async (req, res) => {
         if (!tipo || !params) {
             return res.status(400).json({ error: 'Tipo e parâmetros são obrigatórios.' });
         }
+
+        // Basic numeric validation depending on type
+        const t = String(tipo).toLowerCase();
+        if (t === 'linear') {
+            const { a, b, x } = params;
+            if ([a, b, x].some(v => v === undefined || typeof v !== 'number')) {
+                return res.status(422).json({ error: 'Parâmetros inválidos para função linear. a, b e x devem ser números.' });
+            }
+        } else if (t === 'quadratica') {
+            const { a, b, c, x } = params;
+            if ([a, b, c, x].some(v => v === undefined || typeof v !== 'number')) {
+                return res.status(422).json({ error: 'Parâmetros inválidos para função quadrática. a, b, c e x devem ser números.' });
+            }
+        }
+
         const resultado = funcaoUseCase.execute(tipo, params);
         funcaoRepository.save({ tipo, params, resultado });
         res.json({ tipo, resultado });
@@ -99,4 +117,11 @@ router.post('/:tipo', async (req, res) => {
     }
 });
 
-module.exports = router;
+    return router;
+}
+
+const defaultRouter = createFuncaoRouter();
+module.exports = function(opts) {
+    if (opts && typeof opts === 'object') return createFuncaoRouter(opts);
+    return defaultRouter;
+};

@@ -1,4 +1,11 @@
 {
+  "name": "math",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
   "dependencies": {
     "advanced-calculator": "^1.1.1",
     "body-parser": "^2.2.0",

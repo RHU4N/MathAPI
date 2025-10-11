@@ -1,7 +1,6 @@
 class FuncaoRepository {
-    save(funcao) {
-        // Salvar no banco de dados, se necessário
-        return funcao;
+    save(obj) {
+        return obj;
     }
 }
 

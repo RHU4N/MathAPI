@@ -1,8 +1,4 @@
 class AnaliseCombRepository {
-    save(analise) {
-        // Salvar no banco de dados, se necessário
-        return analise;
-    }
+    save(obj) { return obj; }
 }
-
 module.exports = AnaliseCombRepository;

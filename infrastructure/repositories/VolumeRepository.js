@@ -1,8 +1,4 @@
 class VolumeRepository {
-    save(volume) {
-        // Salvar no banco de dados, se necessário
-        return volume;
-    }
+    save(obj) { return obj; }
 }
-
 module.exports = VolumeRepository;

@@ -1,15 +1,17 @@
-const Angulo = require('../entities/Angulo');
+const defaultStrategies = require('./strategies/angulo');
 
 class CalculateAnguloUseCase {
+    constructor(strategies = defaultStrategies) {
+        this.strategies = strategies;
+    }
+
     execute(tipo, valor) {
-        switch (tipo.toLowerCase()) {
-            case 'radianosparagraus':
-                return Angulo.radianosParaGraus(valor);
-            case 'grauspararadianos':
-                return Angulo.grausParaRadianos(valor);
-            default:
-                throw new Error('Tipo de conversão de ângulo não encontrado');
+        const key = String(tipo).toLowerCase();
+        const strategy = this.strategies[key];
+        if (!strategy) {
+            throw new Error('Tipo de conversão de ângulo não encontrado');
         }
+        return strategy(valor);
     }
 }
 

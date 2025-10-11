@@ -1,8 +1,4 @@
 class EstatisticaRepository {
-    save(estatistica) {
-        // Salvar no banco de dados, se necessário
-        return estatistica;
-    }
+    save(obj) { return obj; }
 }
-
 module.exports = EstatisticaRepository;

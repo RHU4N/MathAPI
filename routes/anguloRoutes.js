@@ -1,10 +1,15 @@
 const express = require('express');
+
+// This module exports a factory: (deps) => router
+// deps: { useCase, repository }
+
 const CalculateAnguloUseCase = require('../domain/usecases/CalculateAnguloUseCase');
 const AnguloRepository = require('../infrastructure/repositories/AnguloRepository');
 
-const router = express.Router();
-const anguloUseCase = new CalculateAnguloUseCase();
-const anguloRepository = new AnguloRepository();
+function createAnguloRouter(deps = {}) {
+    const router = express.Router();
+    const anguloUseCase = deps.useCase || new CalculateAnguloUseCase();
+    const anguloRepository = deps.repository || new AnguloRepository();
 
 /**
  * @openapi
@@ -65,6 +70,10 @@ router.post('/:tipo', async (req, res) => {
         if (!tipo || valor === undefined) {
             return res.status(400).json({ error: 'Tipo e valor são obrigatórios.' });
         }
+        
+        if (typeof valor !== 'number') {
+            return res.status(422).json({ error: 'O campo valor deve ser um número.' });
+        }
         const resultado = anguloUseCase.execute(tipo, valor);
         anguloRepository.save({ tipo, valor, resultado });
         res.json({ tipo, resultado });
@@ -73,4 +82,15 @@ router.post('/:tipo', async (req, res) => {
     }
 });
 
-module.exports = router;
+    return router;
+}
+
+// Backward compatibility: module can be required as the router directly
+// e.g. app.use('/angulo', require('./routes/anguloRoutes'))
+// so also export a default router instance
+const defaultRouter = createAnguloRouter();
+module.exports = function(opts) {
+    // If callers pass an express app or call as factory, return factory result
+    if (opts && typeof opts === 'object') return createAnguloRouter(opts);
+    return defaultRouter;
+};

@@ -1,8 +1,4 @@
 class MatrizRepository {
-    save(matriz) {
-        // Salvar no banco de dados, se necessário
-        return matriz;
-    }
+    save(obj) { return obj; }
 }
-
 module.exports = MatrizRepository;

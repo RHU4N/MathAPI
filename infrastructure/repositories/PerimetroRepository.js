@@ -1,8 +1,4 @@
 class PerimetroRepository {
-    save(perimetro) {
-        // Salvar no banco de dados, se necessário
-        return perimetro;
-    }
+    save(obj) { return obj; }
 }
-
 module.exports = PerimetroRepository;

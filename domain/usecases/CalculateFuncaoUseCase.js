@@ -1,15 +1,17 @@
-const Funcao = require('../entities/Funcao');
+const defaultStrategies = require('./strategies/funcao');
 
 class CalculateFuncaoUseCase {
+    constructor(strategies = defaultStrategies) {
+        this.strategies = strategies;
+    }
+
     execute(tipo, params) {
-        switch (tipo.toLowerCase()) {
-            case 'linear':
-                return Funcao.linear(params.a, params.b, params.x);
-            case 'quadratica':
-                return Funcao.quadratica(params.a, params.b, params.c, params.x);
-            default:
-                throw new Error('Tipo de função não encontrado');
+        const key = String(tipo).toLowerCase();
+        const strategy = this.strategies[key];
+        if (!strategy) {
+            throw new Error('Tipo de função não encontrado');
         }
+        return strategy(params);
     }
 }
 
