@@ -1,3 +1,4 @@
+const { setupSwagger } = require('./swagger/swaggerDocs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -25,5 +26,7 @@ app.use('/analise', analiseCombRoutes);
 app.use('/angulo', anguloRoutes);
 app.use('/estatistica', estatisticaRoutes);
 app.use('/funcao', funcaoRoutes);
+
+setupSwagger(app)
 
 app.listen(port, () => console.log(`Servidor rodando na porta ${port}!`)); // Corrigido o console.log
