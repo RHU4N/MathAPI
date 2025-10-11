@@ -9,6 +9,10 @@ class AnaliseComb {
     static arranjo(n, k) {
         return AnaliseComb.fatorial(n) / AnaliseComb.fatorial(n - k);
     }
+    static arranjoComRepeticao(n, k) {
+        // Com repetição: n^k
+        return Math.pow(n, k);
+    }
     // Adicione outros métodos conforme necessário
 }
 
