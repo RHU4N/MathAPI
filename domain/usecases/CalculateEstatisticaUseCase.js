@@ -1,4 +1,4 @@
-const Estatistica = require('./entities/Estatistica');
+const Estatistica = require('../entities/Estatistica');
 
 class CalculateEstatisticaUseCase {
     execute(tipo, valores) {
