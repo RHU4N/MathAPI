@@ -10,6 +10,7 @@ const estatisticaRepository = new EstatisticaRepository();
  * @openapi
  * /estatistica/{tipo}:
  *  post:
+ *      tags: [Matematica]
  *      summary: Recebe o tipo de operação de estatística e um array de valores númericos.
  *      description: >
  *        Recebe o tipo de operação de estatística e um array de valores númericos.

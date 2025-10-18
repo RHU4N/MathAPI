@@ -10,6 +10,7 @@ const analiseRepository = new AnaliseCombRepository();
  * @openapi
  * /analise/{tipo}:
  *  post:
+ *      tags: [Matematica]
  *      summary: Realiza o cálculo de análise combinatória
  *      description: Recebe o tipo de análise combinatória e os parâmetros necessários, retornando o resultado do cálculo.
  *      parameters:

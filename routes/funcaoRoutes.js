@@ -13,6 +13,7 @@ function createFuncaoRouter(deps = {}) {
  * @openapi
  * /funcao/{tipo}:
  *   post:
+ *     tags: [Matematica]
  *     summary: Calcula o valor de uma função linear ou quadrática
  *     description: >
  *       Realiza o cálculo de uma função com base no tipo informado.

@@ -10,6 +10,7 @@ const areaRepository = new AreaRepository();
  * @openapi
  * /area/{forma}:
  *   post:
+ *     tags: [Matematica]
  *     summary: Calcula a área de uma forma geométrica
  *     description: >
  *       Calcula a área de acordo com a forma geométrica escolhida e suas dimensões.  

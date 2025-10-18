@@ -15,6 +15,7 @@ function createAnguloRouter(deps = {}) {
  * @openapi
  * /angulo/{tipo}:
  *  post:
+ *      tags: [Matematica]
  *      summary: Realiza o cálculo para obter um ângulo
  *      description: Recebe o tipo de conversão de ângulo, retornando o resultado do cálculo.
  *      parameters:

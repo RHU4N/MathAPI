@@ -10,6 +10,7 @@ const volumeRepository = new VolumeRepository();
  * @swagger
  * /volume/{forma}:
  *   post:
+ *     tags: [Matematica]
  *     summary: Calcula o volume de uma forma geométrica
  *     description: >
  *       Calcula o volume de acordo com a forma geométrica escolhida e as dimensões fornecidas.  
