@@ -10,6 +10,7 @@ const matrizRepository = new MatrizRepository();
  * @openapi
  * /matriz/{operacao}:
  *   post:
+ *     tags: [Matematica]
  *     summary: Realiza operações entre matrizes
  *     description: >
  *       Executa uma operação entre duas matrizes fornecidas no corpo da requisição.  

@@ -10,6 +10,7 @@ const perimetroRepository = new PerimetroRepository();
  * @openapi
  * /perimetro/{forma}:
  *   post:
+ *     tags: [Matematica]
  *     summary: Calcula o perímetro de uma forma geométrica
  *     description: >
  *       Calcula o perímetro com base na forma geométrica escolhida e nas dimensões fornecidas.  

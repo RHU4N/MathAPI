@@ -7,6 +7,8 @@ class CalculateEstatisticaUseCase {
                 return Estatistica.media(valores);
             case 'mediana':
                 return Estatistica.mediana(valores);
+            case 'moda':
+                return Estatistica.moda(valores);
             default:
                 throw new Error('Tipo de estatística não encontrado');
         }
