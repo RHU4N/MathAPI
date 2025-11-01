@@ -1,42 +1,25 @@
 const express = require('express');
 const router = express.Router();
 
-//Trabalho
-//T = F * d * cos(θ)
-router.post('/trabalho', (req, res) => {
-    const { F, d, angulo } = req.body;
-    const resultado = `Trabalho = F * d * cos(θ) = ${F} * ${d} * cos(${angulo}) = ${F * d * Math.cos(angulo)}`;
-    return res.json({ resultado });
-});
-//Energia cinética
-//Ec = (m * v^2) / 2
-router.post('/cinetica', (req, res) => {
-    const { m, v } = req.body;
-    const resultado = `Energia cinética = (m * v^2) / 2 = (${m} * ${v}^2) / 2 = ${(m * Math.pow(v, 2)) / 2}`;
-    return res.json({ resultado });
-});
-//Energia potencial gravitacional
-//Ep = m * g * h
-router.post('/potencial-gravitacional', (req, res) => {
-    const { m, h } = req.body;
-    const g = 9.81; // Aceleração devido à gravidade
-    const resultado = `Energia potencial gravitacional = m * g * h = ${m} * ${g} * ${h} = ${m * g * h}`;
-    return res.json({ resultado });
-});
-//Energia potencial elástica
-//Ep = (k * x^2) / 2
-router.post('/potencial-elastica', (req, res) => {
-    const { k, x } = req.body;
-    const resultado = `Energia potencial elástica = (k * x^2) / 2 = (${k} * ${x}^2) / 2 = ${(k * Math.pow(x, 2)) / 2}`;
-    return res.json({ resultado });
-});
-//Potência
-//P = T / Δt
-router.post('/potencia', (req, res) => {
-    const { T, s0, sf } = req.body;
-    const deltaT = sf - s0;
-    const resultado = `Potência = T / Δt = ${T} / ${deltaT} = ${T / deltaT}`;
-    return res.json({ resultado });
-});
+const EnergiaRepository = require('../infrastructure/repositories/EnergiaRepository');
+const CalculateEnergiaUseCase = require('../domain/usecases/CalculateEnergiaUseCase');
+
+const repo = new EnergiaRepository();
+const usecase = new CalculateEnergiaUseCase(repo);
+
+const handle = (action) => async (req, res) => {
+    try {
+        const result = await usecase.execute(action, req.body);
+        return res.json(result);
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+};
+
+router.post('/trabalho', handle('trabalho'));
+router.post('/cinetica', handle('cinetica'));
+router.post('/potencial-gravitacional', handle('potencial-gravitacional'));
+router.post('/potencial-elastica', handle('potencial-elastica'));
+router.post('/potencia', handle('potencia'));
 
 module.exports = router;

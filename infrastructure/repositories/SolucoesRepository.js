@@ -1,7 +1,7 @@
-class FuncaoRepository {
+class SolucoesRepository {
     async save(obj) {
         return Promise.resolve(obj);
     }
 }
 
-module.exports = FuncaoRepository;
+module.exports = SolucoesRepository;

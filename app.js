@@ -22,6 +22,10 @@ const volumeRoutes = require('./routes/volumeRoutes');
 const perimetroRoutes = require('./routes/perimetroRoutes');
 const analiseCombRoutes = require('./routes/analiseCombRoutes');
 const estatisticaRoutes = require('./routes/estatisticaRoutes');
+const cineticaRoutes = require('./routes/cineticaRoutes');
+const dinamicaRoutes = require('./routes/dinamicaRoutes');
+const energiaRoutes = require('./routes/energiaRoutes');
+const solucoesRoutes = require('./routes/solucoesRoutes');
 
 function createApp() {
   const app = express();
@@ -49,6 +53,11 @@ function createApp() {
   app.use('/perimetro', perimetroRoutes);
   app.use('/analise', analiseCombRoutes);
   app.use('/estatistica', estatisticaRoutes);
+  // Física / Química routes
+  app.use('/cinetica', cineticaRoutes);
+  app.use('/dinamica', dinamicaRoutes);
+  app.use('/energia', energiaRoutes);
+  app.use('/solucoes', solucoesRoutes);
 
   // Swagger
   setupSwagger(app);

@@ -1,40 +1,26 @@
 const express = require('express');
 const router = express.Router();
 
-//Concentração comum
-router.post('/concentracao-comum', (req, res) => {
-    const { soluto, volume } = req.body;
-    const resultado = `Concentração comum = soluto / volume = ${soluto} / ${volume} = ${soluto / volume} g/L`;
-    return res.json({ resultado });
-}
-);
-//Molaridade
-router.post('/molaridade', (req, res) => {
-    const { soluto, volume } = req.body;
-    const resultado = `Molaridade = soluto / volume = ${soluto} / ${volume} = ${soluto / volume} mol/L`;
-    return res.json({ resultado });
-});
+const SolucoesRepository = require('../infrastructure/repositories/SolucoesRepository');
+const CalculateSolucoesUseCase = require('../domain/usecases/CalculateSolucoesUseCase');
 
-//Molalidade
-router.post('/molalidade', (req, res) => {
-    const { soluto, solvente } = req.body;
-    const resultado = `Molalidade = soluto / solvente = ${soluto} / ${solvente} = ${soluto / solvente} mol/kg`;
-    return res.json({ resultado });
-});
+const repo = new SolucoesRepository();
+const usecase = new CalculateSolucoesUseCase(repo);
 
-//Fraçao molar
-router.post('/fracao-molar', (req, res) => {
-    const { n1, n2 } = req.body;
-    const resultado = `Fraçao molar = n1 / (n1 + n2) = ${n1} / (${n1} + ${n2}) = ${n1 / (n1 + n2)}`;
-    return res.json({ resultado });
-});
+const handle = (action) => async (req, res) => {
+    try {
+        const result = await usecase.execute(action, req.body);
+        return res.json(result);
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+};
 
-//Densidade
-router.post('/densidade', (req, res) => {
-    const { massa, volume } = req.body;
-    const resultado = `Densidade = massa / volume = ${massa} / ${volume} = ${massa / volume} g/mL`;
-    return res.json({ resultado });
-});
+router.post('/concentracao-comum', handle('concentracao-comum'));
+router.post('/molaridade', handle('molaridade'));
+router.post('/molalidade', handle('molalidade'));
+router.post('/fracao-molar', handle('fracao-molar'));
+router.post('/densidade', handle('densidade'));
 
 /**
  * @openapi

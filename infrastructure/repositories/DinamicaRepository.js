@@ -1,7 +1,7 @@
-class FuncaoRepository {
+class DinamicaRepository {
     async save(obj) {
         return Promise.resolve(obj);
     }
 }
 
-module.exports = FuncaoRepository;
+module.exports = DinamicaRepository;
