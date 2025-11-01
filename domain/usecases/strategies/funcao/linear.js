@@ -15,6 +15,6 @@ module.exports = function (params = {}) {
     return { error: 'No solution (a = 0 and b != 0)' };
   }
 
-  const root = -b / a;
-  return { roots: [root] };
+  const raiz = -b / a;
+  return { raizes: [raiz] };
 };

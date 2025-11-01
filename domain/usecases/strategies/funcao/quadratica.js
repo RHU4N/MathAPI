@@ -14,8 +14,8 @@ module.exports = function (params = {}) {
       if (c === 0) return { error: 'Infinitely many solutions (0 = 0)' };
       return { error: 'No solution (a = 0, b = 0, c != 0)' };
     }
-    const root = -c / b;
-    return { roots: [root] };
+    const raiz = -c / b;
+    return { raizes: [raiz] };
   }
 
   const delta = Math.pow(b, 2) - 4 * a * c;
@@ -23,15 +23,15 @@ module.exports = function (params = {}) {
     const sqrt = Math.sqrt(delta);
     const x1 = (-b - sqrt) / (2 * a);
     const x2 = (-b + sqrt) / (2 * a);
-    return { delta, roots: [x1, x2] };
+    return { delta, raizes: [x1, x2] };
   }
   if (delta === 0) {
     const x0 = -b / (2 * a);
-    return { delta, roots: [x0] };
+    return { delta, raizes: [x0] };
   }
 
-  // Complex roots
+  // Raízes complexas
   const realPart = -b / (2 * a);
   const imag = Math.sqrt(-delta) / (2 * a);
-  return { delta, roots: [ { real: realPart, imag: -imag }, { real: realPart, imag: imag } ] };
+  return { delta, raizes: [ { real: realPart, imag: -imag }, { real: realPart, imag: imag } ] };
 };
