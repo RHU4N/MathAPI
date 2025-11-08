@@ -67,7 +67,7 @@ function createApp() {
   app.use((err, req, res, next) => {
     console.error(err && err.stack ? err.stack : err);
     const status = err && err.status ? err.status : 500;
-    res.status(status).json({ error: (err && err.message) || 'Internal Server Error' });
+    res.status(status).json({ error: (err && err.message) || 'Erro interno no servidor' });
   });
 
   return app;

@@ -116,7 +116,11 @@ router.post('/:tipo', async (req, res) => {
         }
         res.json({ tipo, resultado });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        const msg = error && error.message ? String(error.message) : 'Erro interno no servidor';
+        const lower = msg.toLowerCase();
+        const status = (lower.includes('parâmetr') || lower.includes('obrig') || lower.includes('deve')) ? 400 : 500;
+        const responseMsg = status === 500 ? 'Erro interno no servidor' : msg;
+        res.status(status).json({ error: responseMsg });
     }
 });
 
