@@ -1,17 +1,22 @@
 const defaultStrategies = require('./strategies/funcao');
 
 class CalculateFuncaoUseCase {
-    constructor(strategies = defaultStrategies) {
+    constructor(repository = null, strategies = defaultStrategies) {
+        this.repository = repository;
         this.strategies = strategies;
     }
 
-    execute(tipo, params) {
+    async execute(tipo, params) {
         const key = String(tipo).toLowerCase();
         const strategy = this.strategies[key];
         if (!strategy) {
             throw new Error('Tipo de função não encontrado');
         }
-        return strategy(params);
+        const resultado = strategy(params);
+        if (this.repository && typeof this.repository.save === 'function') {
+            return await this.repository.save({ resultado });
+        }
+        return resultado;
     }
 }
 

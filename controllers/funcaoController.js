@@ -16,7 +16,11 @@ router.post('/funcao1', (req, res) => {
         }
         return res.json({ resultado: a * x + b });
     } catch (error) {
-        return res.status(400).json({ error: error.message });
+        const msg = error && error.message ? String(error.message) : 'Erro interno no servidor';
+        const lower = msg.toLowerCase();
+        const status = (lower.includes('parâmetr') || lower.includes('obrig') || lower.includes('deve')) ? 400 : 500;
+        const responseMsg = status === 500 ? 'Erro interno no servidor' : msg;
+        return res.status(status).json({ error: responseMsg });
     }
 });
 
@@ -51,7 +55,11 @@ router.post('/funcao2', (req, res) => {
             return res.json({ resultado: textResultado });
         }
     } catch (error) {
-        return res.status(400).json({ error: error.message });
+        const msg = error && error.message ? String(error.message) : 'Erro interno no servidor';
+        const lower = msg.toLowerCase();
+        const status = (lower.includes('parâmetr') || lower.includes('obrig') || lower.includes('deve')) ? 400 : 500;
+        const responseMsg = status === 500 ? 'Erro interno no servidor' : msg;
+        return res.status(status).json({ error: responseMsg });
     }
 });
 

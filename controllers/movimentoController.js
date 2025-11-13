@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Permutação
-router.post('/permutacao', (req, res) => {
+router.post('/movimento', (req, res) => {
     const { n, k } = req.body;
     try {
         if (typeof n !== "number" || isNaN(n) || !Number.isInteger(n) || n < 0) {
@@ -18,16 +18,16 @@ router.post('/permutacao', (req, res) => {
             let resultado = 1;
             for (let i = n; i > n - k; i--) resultado *= i;
             
-            let textResultado = "P" + n + " = " + n + "! = " + resultado;
+            let textResultado = "P" + n + " = " + n + "!\nResultado: " + resultado;
             
-            return res.json({ resultado: textResultado });
+            return res.json({ textResultado });
         } else {
             let resultado = 1;
             for (let i = 2; i <= n; i++) resultado *= i;
 
-            let textResultado = "P" + n + " = " + n + "! = " + resultado;
+            let textResultado = "P" + n + " = " + n + "!\nResultado: " + resultado;
 
-            return res.json({ resultado: textResultado });
+            return res.json({ textResultado });
         }
     } catch (error) {
         return res.status(400).json({ error: error.message });
@@ -52,7 +52,7 @@ router.post('/combinacao', (req, res) => {
 
         let textResultado = "C" + n + k + " = " + n + "!/[" + k + "!" + "(" + n + " - " + k + ")!]\nResultado: " + resultado;
 
-        return res.json({ resultado: textResultado });
+        return res.json({ textResultado });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
@@ -76,7 +76,7 @@ router.post('/arranjo', (req, res) => {
 
         let textResultado = "A" + n + "," + k + " = " + n + "!/(" + n + " - " + k + ")!\nResultado: " + resultado
         
-        return res.json({ resultado: textResultado });
+        return res.json({ textResultado });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
@@ -96,7 +96,7 @@ router.post('/arranjoRep', (req, res) => {
 
         let textResultado = "AR" + n + "," + k + " = " + n + "^" + k + "\nResultado: " + resultado;
 
-        return res.json({ resultado: textResultado });
+        return res.json({ textResultado });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }

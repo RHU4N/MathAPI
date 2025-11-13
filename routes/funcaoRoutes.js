@@ -99,22 +99,28 @@ router.post('/:tipo', async (req, res) => {
         // Basic numeric validation depending on type
         const t = String(tipo).toLowerCase();
         if (t === 'linear') {
-            const { a, b, x } = params;
-            if ([a, b, x].some(v => v === undefined || typeof v !== 'number')) {
-                return res.status(422).json({ error: 'Parâmetros inválidos para função linear. a, b e x devem ser números.' });
+            const { a, b } = params;
+            if ([a, b].some(v => v === undefined || typeof v !== 'number')) {
+                return res.status(422).json({ error: 'Parâmetros inválidos para função linear. a e b são obrigatórios e devem ser números. x é opcional (se ausente será resolvido).' });
             }
         } else if (t === 'quadratica') {
-            const { a, b, c, x } = params;
-            if ([a, b, c, x].some(v => v === undefined || typeof v !== 'number')) {
-                return res.status(422).json({ error: 'Parâmetros inválidos para função quadrática. a, b, c e x devem ser números.' });
+            const { a, b, c } = params;
+            if ([a, b, c].some(v => v === undefined || typeof v !== 'number')) {
+                return res.status(422).json({ error: 'Parâmetros inválidos para função quadrática. a, b e c são obrigatórios e devem ser números. x é opcional (se ausente será resolvido).' });
             }
         }
 
-        const resultado = funcaoUseCase.execute(tipo, params);
-        funcaoRepository.save({ tipo, params, resultado });
+        const resultado = await funcaoUseCase.execute(tipo, params);
+        if (funcaoRepository && typeof funcaoRepository.save === 'function') {
+            await funcaoRepository.save({ tipo, params, resultado });
+        }
         res.json({ tipo, resultado });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        const msg = error && error.message ? String(error.message) : 'Erro interno no servidor';
+        const lower = msg.toLowerCase();
+        const status = (lower.includes('parâmetr') || lower.includes('obrig') || lower.includes('deve')) ? 400 : 500;
+        const responseMsg = status === 500 ? 'Erro interno no servidor' : msg;
+        res.status(status).json({ error: responseMsg });
     }
 });
 
