@@ -25,7 +25,7 @@ const handle = (action) => async (req, res) => {
     }
 };
 
-router.post('/porcentagem', handle('porcentagem'));
+router.post('/variacao', handle('variacao'));
 router.post('/variacao-percentual', handle('variacao-porcentual'));
 router.post('/juros/simples', handle('juros-simples'));
 router.post('/juros/compostos', handle('juros-compostos'));

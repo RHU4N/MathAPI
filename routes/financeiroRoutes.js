@@ -2,10 +2,10 @@ const router = require('../controllers/financeiro');
 
 /**
  * @openapi
- * /financeiro/porcentagem:
+ * /financeiro/variacao:
  *   post:
  *     tags: [Financeiro]
- *     summary: Calcula a porcentagem.
+ *     summary: Calcula a Variação do valor pela porcentagem.
  *     requestBody:
  *       required: true
  *       content:
@@ -13,11 +13,15 @@ const router = require('../controllers/financeiro');
  *           schema:
  *             type: object
  *             properties:
- *               n:
+ *               p:
  *                 type: number
  *                 example: 30
+ *               v:
+ *                 type: number
+ *                 example: 8
  *             required:
- *               - n
+ *               - p
+ *               - v
  *     responses:
  *       200:
  *         description: Resultado do cálculo

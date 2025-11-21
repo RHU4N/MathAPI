@@ -1,13 +1,13 @@
 module.exports = {
     
-    'porcentagem': ({ n } = {}) => {
-        const value = (n / 100) * 100;
-        return `Porcentagem = n / 100 = ${n} / 100 = ${n/100} = ${value}%`;
+    'variacao': ({ p, v } = {}) => {
+        const value = (p / 100) * v;
+        return `Variação = Porcentagem% * Valor = ${p} / 100 * ${v} = ${value}`;
     },
     'variacao-percentual': ({ vi, vf } = {}) => {
         const diferenca = vf - vi;
-        const value = diferenca/vi;
-        return `Variação Porcentual = (Valor Final - Valor Inicial) / Valor Inicial = (${vf} - ${vi}) / ${vi} = ${value} = ${value * 100}%`;
+        const value = (diferenca/vi)*100;
+        return `Variação Porcentual = (Valor Final - Valor Inicial) / Valor Inicial = (${vf} - ${vi}) / ${vi} = ${value/100} = ${value}%`;
     },
     'juros-simples': ({ c, i, n } = {}) => {
         const value = c * (1 + i * n);
