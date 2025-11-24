@@ -79,9 +79,9 @@ const options = {
     tags: [
       // Main groups
       { name: 'Matematica', description: 'Operações de matemática (grupo principal)' },
-      { name: 'Quimica', description: 'Operações de química (planejado)' },
-      { name: 'Fisica', description: 'Operações de física (planejado)' },
-      { name: 'MatematicaFinanceira', description: 'Operações de matemática financeira (planejado)' },
+      { name: 'Quimica', description: 'Operações de química ' },
+      { name: 'Fisica', description: 'Operações de física ' },
+      { name: 'Matematica Financeira', description: 'Operações de matemática financeira ' },
       // // Subcategories under Matematica
       // { name: 'Estatistica', description: 'Operações estatísticas' },
       // { name: 'AnaliseCombinatoria', description: 'Análise combinatória (arranjo, combinação, permutação)' },

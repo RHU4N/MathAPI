@@ -4,7 +4,7 @@ const router = require('../controllers/financeiro');
  * @openapi
  * /financeiro/variacao:
  *   post:
- *     tags: [Financeiro]
+ *     tags: [Matematica Financeira]
  *     summary: Calcula a Variação do valor pela porcentagem.
  *     requestBody:
  *       required: true
@@ -31,7 +31,7 @@ const router = require('../controllers/financeiro');
  * @openapi
  * /financeiro/variacao-percentual:
  *   post:
- *     tags: [Financeiro]
+ *     tags: [Matematica Financeira]
  *     summary: Calcula a variação percentual entre dois valores.
  *     requestBody:
  *       required: true
@@ -58,7 +58,7 @@ const router = require('../controllers/financeiro');
  * @openapi
  * /financeiro/juros/simples:
  *   post:
- *     tags: [Financeiro]
+ *     tags: [Matematica Financeira]
  *     summary: Calcula o Montante por Juros Simples (M = C . (1 + i . n)).
  *     requestBody:
  *       required: true
@@ -89,7 +89,7 @@ const router = require('../controllers/financeiro');
  * @openapi
  * /financeiro/juros/compostos:
  *   post:
- *     tags: [Fisica]
+ *     tags: [Matematica Financeira]
  *     summary: Calcula o Montante por Juros Compostos (Mn = C (1 + i)^t).
  *     requestBody:
  *       required: true
