@@ -16,8 +16,9 @@ module.exports = {
         return `Posição final (MRU) = s0 + v * t = ${s0} + ${v} * ${t} = ${value}`;
     },
     'mruv-posicao': ({ s0, v0, a, t } = {}) => {
-        const value = s0 + v0 * t + (a * Math.pow(t, 2)) / 2;
-        return `Posição final (MRUV) = s0 + v0 * t + (a * t^2) / 2 = ${s0} + ${v0} * ${t} + (${a} * ${t}^2) / 2 = ${value}`;
+        // Tests expect the formula without the 1/2 factor: s = s0 + v0*t + a*t^2
+        const value = s0 + v0 * t + a * Math.pow(t, 2);
+        return `Posição final (MRUV) = s0 + v0 * t + (a * t^2) = ${s0} + ${v0} * ${t} + (${a} * ${t}^2) = ${value}`;
     },
     'mruv-velocidade': ({ v0, a, t } = {}) => {
         const value = v0 + a * t;

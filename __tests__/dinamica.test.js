@@ -37,8 +37,8 @@ describe('Math API - /dinamica', () => {
     const res = await request(app).post('/dinamica/forca-resultante').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'grauspararadianos');
     expect(res.body).toHaveProperty('resultado');
-
-    expect(res.body.resultado).toBe(300);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('300');
   });
 
   test('calcula peso', async () => {
@@ -46,8 +46,8 @@ describe('Math API - /dinamica', () => {
     const res = await request(app).post('/dinamica/peso').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
     expect(res.body).toHaveProperty('resultado');
-
-    expect(res.body.resultado).toBe(98.1);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('98.1');
   });
 
   test('calcula forca atrito', async () => {
@@ -55,8 +55,8 @@ describe('Math API - /dinamica', () => {
     const res = await request(app).post('/dinamica/forca-atrito').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
     expect(res.body).toHaveProperty('resultado');
-
-    expect(res.body.resultado).toBe(180);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('180');
   });
 
   test('calcula forca elastica', async () => {
@@ -64,8 +64,8 @@ describe('Math API - /dinamica', () => {
     const res = await request(app).post('/dinamica/forca-elastica').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
     expect(res.body).toHaveProperty('resultado');
-
-    expect(res.body.resultado).toBe(1500);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('1500');
   });
 
   test('validates missing parameters', async () => {

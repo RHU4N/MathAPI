@@ -17,6 +17,25 @@ function mapErrorToResponse(error) {
 
 const handle = (action) => async (req, res) => {
     try {
+        // basic required-params validation per action
+        const required = {
+            velocidade: ['s0','sf','t0','tf'],
+            aceleracao: ['v0','vf','t0','tf'],
+            mru: ['s0','v','t'],
+            'mruv-posicao': ['s0','v0','a','t'],
+            'mruv-velocidade': ['v0','a','t'],
+            torricelli: ['v0','a','s','s0'],
+            'mcu-velocidade-angular': ['periodo'],
+            'mcu-velocidade-linear': ['omega','raio'],
+            'lancamento-velocidade': ['v0','angulo','t'],
+            'lancamento-alcance': ['v0','angulo'],
+            'lancamento-altura-maxima': ['v0','angulo'],
+            'lancamento-tempo-voo': ['v0','angulo']
+        }[action];
+        if (required) {
+            const missing = required.filter(k => req.body[k] === undefined || typeof req.body[k] !== 'number');
+            if (missing.length) throw new Error('Parâmetros obrigatórios faltando: ' + missing.join(', '));
+        }
         const result = await usecase.execute(action, req.body);
         return res.json(result);
     } catch (error) {

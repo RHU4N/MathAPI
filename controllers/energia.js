@@ -17,6 +17,17 @@ function mapErrorToResponse(error) {
 
 const handle = (action) => async (req, res) => {
     try {
+        const required = {
+            trabalho: ['F','d','angulo'],
+            cinetica: ['m','v'],
+            'potencial-gravitacional': ['m','h'],
+            'potencial-elastica': ['k','x'],
+            potencia: ['T','s0','sf']
+        }[action];
+        if (required) {
+            const missing = required.filter(k => req.body[k] === undefined || typeof req.body[k] !== 'number');
+            if (missing.length) throw new Error('Parâmetros obrigatórios faltando: ' + missing.join(', '));
+        }
         const result = await usecase.execute(action, req.body);
         return res.json(result);
     } catch (error) {

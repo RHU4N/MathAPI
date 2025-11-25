@@ -17,6 +17,18 @@ function mapErrorToResponse(error) {
 
 const handle = (action) => async (req, res) => {
     try {
+        const requiredMap = {
+            'concentracao-comum': ['soluto','volume'],
+            molaridade: ['soluto','volume'],
+            molalidade: ['soluto','solvente'],
+            'fracao-molar': ['n1','n2'],
+            densidade: ['massa','volume']
+        };
+        const required = requiredMap[action];
+        if (required) {
+            const missing = required.filter(k => req.body[k] === undefined || typeof req.body[k] !== 'number');
+            if (missing.length) throw new Error('Parâmetros obrigatórios faltando: ' + missing.join(', '));
+        }
         const result = await usecase.execute(action, req.body);
         return res.json(result);
     } catch (error) {

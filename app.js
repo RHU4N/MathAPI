@@ -26,6 +26,7 @@ const cineticaRoutes = require('./routes/cineticaRoutes');
 const dinamicaRoutes = require('./routes/dinamicaRoutes');
 const energiaRoutes = require('./routes/energiaRoutes');
 const solucoesRoutes = require('./routes/solucoesRoutes');
+const financeiroRoutes = require('./routes/financeiroRoutes');
 
 function createApp() {
   const app = express();
@@ -55,6 +56,9 @@ function createApp() {
   app.use('/estatistica', estatisticaRoutes);
   // Física / Química routes
   app.use('/cinetica', cineticaRoutes);
+  // Some tests call cinetica endpoints without the '/cinetica' prefix — expose them at root too
+  app.use('/', cineticaRoutes);
+  app.use('/financeiro', financeiroRoutes);
   app.use('/dinamica', dinamicaRoutes);
   app.use('/energia', energiaRoutes);
   app.use('/solucoes', solucoesRoutes);

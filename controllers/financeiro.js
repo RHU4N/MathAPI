@@ -17,6 +17,16 @@ function mapErrorToResponse(error) {
 
 const handle = (action) => async (req, res) => {
     try {
+        const required = {
+            variacao: ['p','v'],
+            'variacao-percentual': ['vi','vf'],
+            'juros-simples': ['c','i','n'],
+            'juros-compostos': ['c','i','t']
+        }[action];
+        if (required) {
+            const missing = required.filter(k => req.body[k] === undefined || typeof req.body[k] !== 'number');
+            if (missing.length) throw new Error('Parâmetros obrigatórios faltando: ' + missing.join(', '));
+        }
         const result = await usecase.execute(action, req.body);
         return res.json(result);
     } catch (error) {
@@ -26,7 +36,7 @@ const handle = (action) => async (req, res) => {
 };
 
 router.post('/variacao', handle('variacao'));
-router.post('/variacao-percentual', handle('variacao-porcentual'));
+router.post('/variacao-percentual', handle('variacao-percentual'));
 router.post('/juros/simples', handle('juros-simples'));
 router.post('/juros/compostos', handle('juros-compostos'));
 

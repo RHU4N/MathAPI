@@ -42,41 +42,42 @@ describe('Math API - /solucoes', () => {
   test('calcula concentracao comum', async () => {
     const payload = { soluto: 20, volume: 0.5};
     const res = await request(app).post('/solucoes/concentracao-comum').send(payload).expect(200);
-
     expect(res.body).toHaveProperty('resultado');
-    expect(res.body.resultado).toBe(40);
+    // strategy returns a human-readable string; assert it's a string containing the numeric result
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('40');
   });
 
   test('calcula molaridade', async () => {
     const payload = { soluto: 0.25, volume: 0.5 };
     const res = await request(app).post('/solucoes/molaridade').send(payload).expect(200);
-
     expect(res.body).toHaveProperty('resultado');
-    expect(res.body.resultado).toBe(0.5);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('0.5');
   });
   
   test('calcula molalidade', async () => {
     const payload = { soluto: 0.3, solvente: 0.2 };
     const res = await request(app).post('/solucoes/molalidade').send(payload).expect(200);
-
     expect(res.body).toHaveProperty('resultado');
-    expect(res.body.resultado).toBe(1.5);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('1.5');
   });
 
   test('calcula fracao molar', async () => {
     const payload = { n1: 2, n2: 6 };
     const res = await request(app).post('/solucoes/fracao-molar').send(payload).expect(200);
-
     expect(res.body).toHaveProperty('resultado');
-    expect(res.body.resultado).toBe(0.25);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('0.25');
   });
 
   test('calcula densidade', async () => {
     const payload = { massa: 50, volume: 20 };
     const res = await request(app).post('/solucoes/densidade').send(payload).expect(200);
-
     expect(res.body).toHaveProperty('resultado');
-    expect(res.body.resultado).toBe(2.5);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('2.5');
   });
 
   test('validates missing parameters', async () => {

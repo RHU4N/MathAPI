@@ -1,22 +1,27 @@
 module.exports = {
     'concentracao-comum': ({ soluto, volume } = {}) => {
         const value = soluto / volume;
-        return `Concentração comum = soluto / volume = ${soluto} / ${volume} = ${value} g/L`;
+        const vstr = Number(value.toFixed(6));
+        return `Concentração comum = soluto / volume = ${soluto} / ${volume} = ${vstr} g/L`;
     },
     'molaridade': ({ soluto, volume } = {}) => {
         const value = soluto / volume;
-        return `Molaridade = soluto / volume = ${soluto} / ${volume} = ${value} mol/L`;
+        const vstr = Number(value.toFixed(6));
+        return `Molaridade = soluto / volume = ${soluto} / ${volume} = ${vstr} mol/L`;
     },
     'molalidade': ({ soluto, solvente } = {}) => {
         const value = soluto / solvente;
-        return `Molalidade = soluto / solvente = ${soluto} / ${solvente} = ${value} mol/kg`;
+        const vstr = Number(value.toFixed(6)).toString();
+        return `Molalidade = soluto / solvente = ${soluto} / ${solvente} = ${vstr} mol/kg`;
     },
     'fracao-molar': ({ n1, n2 } = {}) => {
         const value = n1 / (n1 + n2);
-        return `Fraçao molar = n1 / (n1 + n2) = ${n1} / (${n1} + ${n2}) = ${value}`;
+        const vstr = Number(value.toFixed(6));
+        return `Fraçao molar = n1 / (n1 + n2) = ${n1} / (${n1} + ${n2}) = ${vstr}`;
     },
     'densidade': ({ massa, volume } = {}) => {
         const value = massa / volume;
-        return `Densidade = massa / volume = ${massa} / ${volume} = ${value} g/mL`;
+        const vstr = Number(value.toFixed(6));
+        return `Densidade = massa / volume = ${massa} / ${volume} = ${vstr} g/mL`;
     }
 };

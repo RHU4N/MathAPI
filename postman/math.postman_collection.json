@@ -1,0 +1,99 @@
+{
+  "info": {
+    "name": "mathApi - Postman Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health - Root",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Angulo - radianosparaGraus",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"valor\": 3.141592653589793\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/angulo/radianosparagraus",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "angulo",
+            "radianosparagraus"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Has resultado number', function () { var json = pm.response.json(); pm.expect(json).to.have.property('resultado'); pm.expect(typeof json.resultado).to.eql('number'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Funcao - linear",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"a\": 2,\n  \"b\": 3,\n  \"x\": 5\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/funcao/linear",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "funcao",
+            "linear"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Has resultado', function () { var json = pm.response.json(); pm.expect(json).to.have.property('resultado'); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

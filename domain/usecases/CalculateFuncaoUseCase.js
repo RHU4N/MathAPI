@@ -12,9 +12,14 @@ class CalculateFuncaoUseCase {
         if (!strategy) {
             throw new Error('Tipo de função não encontrado');
         }
-        const resultado = strategy(params);
+        let resultado = strategy(params);
+        // Unwrap strategy result objects that hold the numeric value under `value`
+        if (resultado && typeof resultado === 'object' && Object.prototype.hasOwnProperty.call(resultado, 'value')) {
+            resultado = resultado.value;
+        }
         if (this.repository && typeof this.repository.save === 'function') {
-            return await this.repository.save({ resultado });
+            // persist but return the raw resultado (primitive or object as produced)
+            await this.repository.save({ resultado });
         }
         return resultado;
     }

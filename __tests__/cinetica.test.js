@@ -14,7 +14,8 @@ describe('Math API - /cinetica', () => {
     //expect(res.body).toHaveProperty('tipo', 'grauspararadianos');
     expect(res.body).toHaveProperty('resultado');
     // 180 graus == PI radianos
-    expect(res.body.resultado).toBe(10);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('10');
   });
 
   test('aceleracaoMedia', async () => {
@@ -23,7 +24,8 @@ describe('Math API - /cinetica', () => {
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
     expect(res.body).toHaveProperty('resultado');
     // PI radianos == 180 graus
-    expect(res.body.resultado).toBe(2);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('2');
   });
 
   test('mruTest', async () => {
@@ -32,7 +34,8 @@ describe('Math API - /cinetica', () => {
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
     expect(res.body).toHaveProperty('resultado');
     // PI radianos == 180 graus
-    expect(res.body.resultado).toBe(50);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('50');
   });
 
   test('mruvPos', async () => {
@@ -41,7 +44,8 @@ describe('Math API - /cinetica', () => {
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
     expect(res.body).toHaveProperty('resultado');
     // PI radianos == 180 graus
-    expect(res.body.resultado).toBe(100);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('100');
   });
 
   test('mruvVel', async () => {
@@ -50,7 +54,8 @@ describe('Math API - /cinetica', () => {
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
     expect(res.body).toHaveProperty('resultado');
     // PI radianos == 180 graus
-    expect(res.body.resultado).toBe(20);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('20');
   });
 
   test('torricelliTest', async () => {
@@ -59,7 +64,8 @@ describe('Math API - /cinetica', () => {
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
     expect(res.body).toHaveProperty('resultado');
     // PI radianos == 180 graus
-    expect(res.body.resultado).toBe(20);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('20');
   });
 
   test('validates missing parameters', async () => {

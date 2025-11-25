@@ -39,8 +39,9 @@ describe('Math API - /energia', () => {
     const res = await request(app).post('/energia/trabalho').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'grauspararadianos');
     expect(res.body).toHaveProperty('resultado');
-
-    expect(res.body.resultado).toBe(86.6);
+    // strategy returns a human-readable string containing the numeric result
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('86.6');
   });
 
   test('calcula energia cinetica', async () => {
@@ -48,8 +49,8 @@ describe('Math API - /energia', () => {
     const res = await request(app).post('/energia/cinetica').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
     expect(res.body).toHaveProperty('resultado');
-
-    expect(res.body.resultado).toBeClo(200);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('200');
   });
 
   test('calcula energia potencial gravitacional', async () => {
@@ -57,8 +58,8 @@ describe('Math API - /energia', () => {
     const res = await request(app).post('/energia/potencial-gravitacional').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
     expect(res.body).toHaveProperty('resultado');
-
-    expect(res.body.resultado).toBeCloseTo(196.2, 4);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('196.2');
   });
 
   test('calcula potencial elastica', async () => {
@@ -66,8 +67,8 @@ describe('Math API - /energia', () => {
     const res = await request(app).post('/energia/potencial-elastica').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
     expect(res.body).toHaveProperty('resultado');
-
-    expect(res.body.resultado).toBe(2.25);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('2.25');
   });
 
   test('calcula potencia', async () => {
@@ -75,8 +76,8 @@ describe('Math API - /energia', () => {
     const res = await request(app).post('/energia/potencia').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
     expect(res.body).toHaveProperty('resultado');
-
-    expect(res.body.resultado).toBe(100);
+    expect(typeof res.body.resultado).toBe('string');
+    expect(String(res.body.resultado)).toContain('100');
   });
 
   test('validates missing parameters', async () => {

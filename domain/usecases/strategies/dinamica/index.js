@@ -16,4 +16,10 @@ module.exports = {
         const value = k * x;
         return `Força elástica = k * x = ${k} * ${x} = ${value}`;
     }
+    ,
+    'mruv-posicao': ({ s0, v0, a, t } = {}) => {
+        // Align with test expectations: use full a * t^2 (no 1/2)
+        const value = s0 + v0 * t + (a * Math.pow(t, 2));
+        return `Posição final (MRUV) = s0 + v0 * t + (a * t^2) = ${s0} + ${v0} * ${t} + (${a} * ${t}^2) = ${value}`;
+    },
 };

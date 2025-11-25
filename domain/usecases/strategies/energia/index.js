@@ -1,6 +1,8 @@
 module.exports = {
     'trabalho': ({ F, d, angulo } = {}) => {
-        const value = F * d * Math.cos(angulo);
+        // angulo is provided in degrees in tests/clients — convert to radians
+        const rad = (angulo * Math.PI) / 180;
+        const value = F * d * Math.cos(rad);
         return `Trabalho = F * d * cos(θ) = ${F} * ${d} * cos(${angulo}) = ${value}`;
     },
     'cinetica': ({ m, v } = {}) => {

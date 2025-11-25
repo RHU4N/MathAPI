@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "test:file": "node run-tests.js"
   },
   "dependencies": {
     "advanced-calculator": "^1.1.1",
