@@ -2,9 +2,9 @@ name: CI - mathAPI
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ master, main, devops ]
   pull_request:
-    branches: [ master, main ]
+    branches: [ master, main, devops ]
 
 jobs:
   build:
@@ -123,3 +123,20 @@ jobs:
         working-directory: ./mathApi
         run: |
           npx newman run postman/math.postman_collection.json -e postman/math.postman_environment.json --timeout-request 15000 --bail
+
+  notify-on-failure:
+    name: Notify on CI failure
+    needs: build
+    if: ${{ needs.build.result == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create issue about CI failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          repo="${{ github.repository }}"
+          title="[CI] mathApi: build/tests failed on ${{ github.ref }}"
+          body="CI job 'build' failed for commit ${{ github.sha }}. See the Actions log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\nActor: ${{ github.actor }}"
+          curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" \
+            -d "{\"title\": \"${title}\", \"body\": \"${body}\", \"labels\": [\"ci-failed\"] }" \
+            "https://api.github.com/repos/${repo}/issues" || true
