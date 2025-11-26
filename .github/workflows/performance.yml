@@ -26,7 +26,7 @@ jobs:
           # If still empty, try to extract the first http(s) URL from a repo .env file
           if [ -z "$TARGET" ] && [ -f .env ]; then
             # Capture first http(s) URL found in .env (handles plain URL or key=URL lines)
-            FOUND=$(grep -Eo 'https?://[^"'"'\s]+' .env | head -n 1 || true)
+            FOUND=$(grep -Eo 'https?://[^[:space:]"]+' .env | head -n 1 || true)
             if [ -n "$FOUND" ]; then TARGET="$FOUND"; fi
           fi
 
