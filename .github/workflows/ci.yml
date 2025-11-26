@@ -98,12 +98,13 @@ jobs:
 
       - name: Install dependencies (mathApi)
         run: |
-          if [ ! -d "./mathApi" ]; then
-            echo "Directory ./mathApi not found. Listing repo root:";
+          # run in repository root (this workflow is inside the package folder)
+          if [ ! -f "package.json" ]; then
+            echo "No package.json found in repo root. Listing repo root:";
             ls -la
             exit 1
           fi
-          npm --prefix ./mathApi install --no-audit --no-fund
+          npm install --no-audit --no-fund
 
       - name: Start mathApi server
         env:
@@ -111,12 +112,12 @@ jobs:
           NODE_ENV: development
         run: |
           # start server from project folder and save logs for debugging
-          if [ ! -d "./mathApi" ]; then
-            echo "Directory ./mathApi not found. Listing repo root:";
+          if [ ! -f "package.json" ]; then
+            echo "No package.json found in repo root. Listing repo root:";
             ls -la
             exit 1
           fi
-          npm --prefix ./mathApi run start > ./mathApi/server.log 2>&1 &
+          npm run start > ./server.log 2>&1 &
           n=0
           until curl -sSf http://localhost:8080/ >/dev/null 2>&1 || [ $n -ge 60 ]; do
             n=$((n+1))
@@ -126,25 +127,25 @@ jobs:
           if [ $n -ge 60 ]; then
             echo "Server did not start in time"
             echo "---- server.log ----"
-            tail -n 200 ./mathApi/server.log || true
+            tail -n 200 ./server.log || true
             exit 1
           fi
 
       - name: Run Newman collection (math)
         run: |
-          if [ ! -d "./mathApi" ]; then
-            echo "Directory ./mathApi not found. Listing repo root:";
+          if [ ! -f "package.json" ]; then
+            echo "No package.json found in repo root. Listing repo root:";
             ls -la
             exit 1
           fi
-          npm --prefix ./mathApi install newman --no-save
+          npm install newman --no-save
           # show server log head before running tests for context
           echo "---- server.log (head) ----"
-          head -n 200 ./mathApi/server.log || true
-          ./mathApi/node_modules/.bin/newman run postman/math.postman_collection.json -e postman/math.postman_environment.json --timeout-request 15000 --bail || {
+          head -n 200 ./server.log || true
+          ./node_modules/.bin/newman run postman/math.postman_collection.json -e postman/math.postman_environment.json --timeout-request 15000 --bail || {
             echo "Newman failed; dumping server.log";
             echo "---- server.log (full) ----";
-            tail -n +1 ./mathApi/server.log || true;
+            tail -n +1 ./server.log || true;
             exit 1;
           }
 
