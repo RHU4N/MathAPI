@@ -97,42 +97,54 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies (mathApi)
-        working-directory: ./mathApi
         run: |
-          npm install --no-audit --no-fund
+          if [ ! -d "./mathApi" ]; then
+            echo "Directory ./mathApi not found. Listing repo root:";
+            ls -la
+            exit 1
+          fi
+          npm --prefix ./mathApi install --no-audit --no-fund
 
       - name: Start mathApi server
-        working-directory: ./mathApi
         env:
           PORT: 8080
           NODE_ENV: development
         run: |
-          # start server and save logs for debugging
-          node index.js > server.log 2>&1 &
+          # start server from project folder and save logs for debugging
+          if [ ! -d "./mathApi" ]; then
+            echo "Directory ./mathApi not found. Listing repo root:";
+            ls -la
+            exit 1
+          fi
+          npm --prefix ./mathApi run start > ./mathApi/server.log 2>&1 &
           n=0
-          until curl -sSf http://localhost:8080/ >/dev/null 2>&1 || [ $n -ge 30 ]; do
+          until curl -sSf http://localhost:8080/ >/dev/null 2>&1 || [ $n -ge 60 ]; do
             n=$((n+1))
             echo "waiting for server... $n"
             sleep 1
           done
-          if [ $n -ge 30 ]; then
+          if [ $n -ge 60 ]; then
             echo "Server did not start in time"
             echo "---- server.log ----"
-            tail -n 200 server.log || true
+            tail -n 200 ./mathApi/server.log || true
             exit 1
           fi
 
       - name: Run Newman collection (math)
-        working-directory: ./mathApi
         run: |
-          npm install newman --no-save
+          if [ ! -d "./mathApi" ]; then
+            echo "Directory ./mathApi not found. Listing repo root:";
+            ls -la
+            exit 1
+          fi
+          npm --prefix ./mathApi install newman --no-save
           # show server log head before running tests for context
           echo "---- server.log (head) ----"
-          head -n 200 server.log || true
-          npx newman run postman/math.postman_collection.json -e postman/math.postman_environment.json --timeout-request 15000 --bail || {
+          head -n 200 ./mathApi/server.log || true
+          ./mathApi/node_modules/.bin/newman run postman/math.postman_collection.json -e postman/math.postman_environment.json --timeout-request 15000 --bail || {
             echo "Newman failed; dumping server.log";
             echo "---- server.log (full) ----";
-            tail -n +1 server.log || true;
+            tail -n +1 ./mathApi/server.log || true;
             exit 1;
           }
 
