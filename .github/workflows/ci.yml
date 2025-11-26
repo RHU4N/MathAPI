@@ -149,6 +149,66 @@ jobs:
             exit 1;
           }
 
+  infra-tests:
+    name: Infra Tests - mathApi
+    needs: newman-math
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Start server for infra tests
+        run: |
+          node index.js > server.log 2>&1 & echo $! > server.pid || (echo "failed to start"; cat server.log || true; exit 1)
+
+      - name: Wait for service (health)
+        run: |
+          set -e
+          for i in $(seq 1 30); do
+            if curl -sfS http://localhost:8080/ >/dev/null 2>&1; then
+              echo "service is up"; exit 0
+            fi
+            if curl -sfS http://localhost:8080/health >/dev/null 2>&1; then
+              echo "service is healthy"; exit 0
+            fi
+            echo "waiting for service... ($i)"; sleep 2
+          done
+          echo "::error::service did not become ready in time"
+          cat server.log || true
+          exit 1
+
+      - name: Run infra test script or smoke checks
+        run: |
+          if [ -f run-tests.js ]; then
+            node run-tests.js || (echo "run-tests.js failed"; cat server.log || true; exit 1)
+          else
+            echo "run-tests.js not found; running basic smoke checks"
+            curl -fS http://localhost:8080/ || (echo "root failed"; cat server.log || true; exit 1)
+            curl -fS http://localhost:8080/angulo/90 || true
+          fi
+
+      - name: Upload server log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: math-server-log
+          path: server.log
+
+      - name: Stop server
+        if: always()
+        run: |
+          if [ -f server.pid ]; then
+            kill $(cat server.pid) || true
+            rm -f server.pid
+          fi
+
   notify-on-failure:
     name: Notify on CI failure
     needs: build
