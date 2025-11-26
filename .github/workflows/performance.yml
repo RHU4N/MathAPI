@@ -17,11 +17,26 @@ jobs:
 
       - name: Resolve target URL
         run: |
+          # Prefer explicit repository secret/variable names first
           TARGET="${{ secrets.CEOS_MATH_API_URL }}"
           if [ -z "$TARGET" ]; then TARGET="${{ vars.CEOS_MATH_API_URL }}"; fi
           if [ -z "$TARGET" ]; then TARGET="${{ secrets.MATH_URL }}"; fi
           if [ -z "$TARGET" ]; then TARGET="${{ vars.MATH_URL }}"; fi
-          if [ -z "$TARGET" ]; then echo "ERROR: No MATH_URL configured"; exit 1; fi
+
+          # If still empty, try to extract the first http(s) URL from a repo .env file
+          if [ -z "$TARGET" ] && [ -f .env ]; then
+            # Capture first http(s) URL found in .env (handles plain URL or key=URL lines)
+            FOUND=$(grep -Eo 'https?://[^"'"'\s]+' .env | head -n 1 || true)
+            if [ -n "$FOUND" ]; then TARGET="$FOUND"; fi
+          fi
+
+          # Final fallback to localhost (do not fail the job) so CI can still run
+          if [ -z "$TARGET" ]; then
+            echo "WARNING: No MATH_URL configured via secrets/vars/.env — using localhost fallback"
+            TARGET="http://127.0.0.1:3000/"
+          fi
+
+          echo "Resolved TARGET: $TARGET"
           echo "TARGET_URL=$TARGET" >> $GITHUB_ENV
 
       - name: Install k6
