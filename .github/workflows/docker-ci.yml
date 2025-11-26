@@ -1,0 +1,80 @@
+name: CI - mathApi (Docker smoke tests)
+
+on:
+  push:
+    branches: [ main, master, devops ]
+  pull_request:
+    branches: [ main, master, devops ]
+
+jobs:
+  docker-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Build Docker image
+        run: |
+          docker build -t mathapi:ci .
+
+      - name: Run container
+        run: |
+          docker run -d --name mathapi-ci -p 8080:8080 mathapi:ci || (docker logs mathapi-ci || true; exit 1)
+
+      - name: Wait for service (health check)
+        run: |
+          set -e
+          for i in $(seq 1 30); do
+            if curl -sfS http://localhost:8080/ >/dev/null 2>&1; then
+              echo "service is up"; exit 0
+            fi
+            if curl -sfS http://localhost:8080/health >/dev/null 2>&1; then
+              echo "service is healthy"; exit 0
+            fi
+            echo "waiting for service... ($i)"; sleep 2
+          done
+          echo "::error::service did not become ready in time"
+          docker logs mathapi-ci || true
+          exit 1
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run Postman/Newman collection
+        run: |
+          # run collection and produce junit report
+          if [ -f postman/math.postman_collection.json ]; then
+            newman run postman/math.postman_collection.json -e postman/math.postman_environment.json --timeout-request 15000 --reporters cli,junit --reporter-junit-export newman-report.xml || true
+          else
+            echo "Postman collection not found at postman/math.postman_collection.json"; exit 1
+          fi
+
+      - name: Upload Newman report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-report
+          path: newman-report.xml
+
+      - name: Collect container logs on failure
+        if: failure()
+        run: |
+          docker logs mathapi-ci > mathapi-server.log || true
+
+      - name: Upload server logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mathapi-server-log
+          path: mathapi-server.log
+
+      - name: Always: stop and remove container
+        if: always()
+        run: |
+          docker rm -f mathapi-ci || true
