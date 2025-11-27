@@ -27,6 +27,20 @@ Esta API permite realizar operações matemáticas como cálculo de área, volum
    ```
    O servidor rodará por padrão em `http://localhost:8081`.
 
+## Testes e ferramentas no CI
+
+- Unit / integration tests: Jest + Supertest (`__tests__`) — execute com `npm test`.
+- API collections: Postman collection em `postman/math.postman_collection.json` — CI usa Newman para rodar estas coleções.
+- Performance: `k6` script em `tests/perf/k6_test.js` (usado em workflows de performance).
+- Security: `snyk` e `npm audit` workflows estão disponíveis (SNYK_TOKEN requerido para Snyk).
+
+## Health & Deploy
+
+- Health endpoint usado pelo CI/Render: configure `health` ou `/health` conforme `render.yaml`.
+- Deploy típico: Render (`render.yaml`) — Render faz health checks frequentes por instância.
+
+**Last updated:** 2025-11-27
+
 ## Endpoints principais
 
 ### Área
