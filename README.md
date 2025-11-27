@@ -105,10 +105,4 @@ Esta API permite realizar operações matemáticas como cálculo de área, volum
     ```json
     { "a": 2, "b": 3, "x": 4 }
     ```
-
-## Testando a API
-Você pode testar usando [Hoppscotch](https://hoppscotch.io/) ou Postman. Veja exemplos de requisições no início deste README.
-
----
-
-> Projeto acadêmico para fins de estudo e prática de Clean Architecture.
+    
