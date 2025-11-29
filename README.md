@@ -1,108 +1,146 @@
-# MathAPI
 
-API REST para cálculos matemáticos diversos, estruturada em Clean Architecture.
+# Math API (mathApi)
 
-## Desenvolvedores
-- Rhuan
+Breve descrição
+----------------
+API REST para cálculos matemáticos e físicos consumida pelo frontend CEOS. Esta API implementa endpoints para operações como ângulo, área, estatística, dinâmica, energia, cinética, funções, matrizes e mais.
+
+Principais funcionalidades
+-------------------------
+- Endpoints REST organizados por responsabilidade (veja `routes/`).
+- Lógica de negócio em `usecases/` para facilitar testes e manutenção.
+- Testes unitários e de integração em `__tests__/`.
+- Suporte a containerização e deploy via `Docker` / `render.yaml`.
+
+Colaboradores
+-------------
 - Leonardo
-- Vitor
 - Mauricio
+- Rhuan
+- Vitor
 
-## Descrição
-Esta API permite realizar operações matemáticas como cálculo de área, volume, perímetro, operações com matrizes, análise combinatória, conversão de ângulos, estatística e funções matemáticas.
+URL pública (opcional)
+---------------------
+[SWAGGER](https://mathapi.onrender.com)
 
-## Tecnologias
+Tecnologias utilizadas
+----------------------
 - Node.js
 - Express
-- Clean Architecture
+- JavaScript (ES6+)
+- Testes: Jest + Supertest (quando aplicável)
+- Docker (Dockerfile incluído)
 
-## Como rodar
-1. Instale as dependências:
-   ```sh
-   npm install
-   ```
-2. Inicie o servidor:
-   ```sh
-   npx nodemon index.js
-   ```
-   O servidor rodará por padrão em `http://localhost:8081`.
+Estrutura relevante
+-------------------
+- `controllers/` — controllers Express que recebem requisições.
+- `usecases/` — lógica de cálculo/negócio (Clean Architecture).
+- `infrastructure/repositories/` — adaptadores para persistência, se necessário.
+- `routes/` — definição das rotas e versões da API.
+- `__tests__/` — testes unitários e de integração.
 
-## Testes e ferramentas no CI
+Executando localmente
+---------------------
+1. Instale dependências:
 
-- Unit / integration tests: Jest + Supertest (`__tests__`) — execute com `npm test`.
-- API collections: Postman collection em `postman/math.postman_collection.json` — CI usa Newman para rodar estas coleções.
-- Performance: `k6` script em `tests/perf/k6_test.js` (usado em workflows de performance).
-- Security: `snyk` e `npm audit` workflows estão disponíveis (SNYK_TOKEN requerido para Snyk).
+```cmd
+cd mathApi
+npm install
+```
 
-## Health & Deploy
+2. Inicie em desenvolvimento (exemplo com nodemon):
 
-- Health endpoint usado pelo CI/Render: configure `health` ou `/health` conforme `render.yaml`.
-- Deploy típico: Render (`render.yaml`) — Render faz health checks frequentes por instância.
+```cmd
+npx nodemon index.js
+```
 
-**Last updated:** 2025-11-27
+ou
 
-## Endpoints principais
+```cmd
+node index.js
+```
 
-### Área
-- `POST /area/{forma}`
-  - Exemplo: `/area/quadrado`
-  - Body:
-    ```json
-    { "lado": 4, "altura": 4 }
-    ```
+3. Executar testes:
 
-### Volume
-- `POST /volume/{forma}`
-  - Exemplo: `/volume/cubo`
-  - Body:
-    ```json
-    { "lado": 3 }
-    ```
+```cmd
+npm test
+```
 
-### Perímetro
-- `POST /perimetro/{forma}`
-  - Exemplo: `/perimetro/retangulo`
-  - Body:
-    ```json
-    { "largura": 5, "altura": 2 }
-    ```
+Porta padrão
+------------
+Por padrão esta API inicia na porta `8081` (ver `index.js`). Altere via variável de ambiente se necessário.
 
-### Matriz
-- `POST /matriz/soma`
-  - Body:
-    ```json
-    { "a": [[1,2],[3,4]], "b": [[5,6],[7,8]] }
-    ```
+Endpoints principais (exemplos)
+-----------------------------
+Veja `routes/` para a lista completa; abaixo seguem exemplos de uso para as rotas mais comuns.
 
-### Análise Combinatória
-- `POST /analise/{tipo}`
-  - Exemplo: `/analise/combinacao`
-  - Body:
-    ```json
-    { "n": 5, "k": 2 }
-    ```
+1) Ângulo
 
-### Ângulo
-- `POST /angulo/{tipo}`
-  - Exemplo: `/angulo/grauspararadianos`
-  - Body:
-    ```json
-    { "valor": 180 }
-    ```
+- POST /angulo/:tipo
+  - Exemplos de `:tipo`: `grauspararadianos`, `radianosparagraus`.
+  - Body (exemplo):
 
-### Estatística
-- `POST /estatistica/{tipo}`
-  - Exemplo: `/estatistica/media`
-  - Body:
-    ```json
-    { "valores": [1,2,3,4,5] }
-    ```
+```json
+{ "valor": 180 }
+```
 
-### Função
-- `POST /funcao/{tipo}`
-  - Exemplo: `/funcao/linear`
-  - Body:
-    ```json
-    { "a": 2, "b": 3, "x": 4 }
-    ```
+Resposta esperada (exemplo):
+
+```json
+{ "resultado": 3.141592653589793 }
+```
+
+2) Estatística
+
+- POST /estatistica/:tipo
+  - Exemplos de `:tipo`: `media`, `mediana`, `desvio`.
+  - Body (exemplo):
+
+```json
+{ "valores": [1, 2, 3, 4, 5] }
+```
+
+Resposta esperada (exemplo):
+
+```json
+{ "resultado": 3 }
+```
+
+3) Funções / Equações
+
+- POST /funcao/:tipo
+  - Exemplos de `:tipo`: `linear`, `quadratica`.
+  - Body (exemplo função linear):
+
+```json
+{ "a": 2, "b": 3, "x": 4 }
+```
+
+Resposta esperada (exemplo):
+
+```json
+{ "resultado": 11 }
+```
+
+4) Outras rotas
+
+- Área / Volume / Perímetro: `POST /area/:forma`, `POST /volume/:forma`, `POST /perimetro/:forma` (veja `routes/` para formatos aceitos).
+- Matrizes: `POST /matriz/soma`, `POST /matriz/multiplica` (exemplos em `postman/`).
+
+Coleções e testes automatizados
+--------------------------------
+- Postman collection: `postman/math.postman_collection.json` (útil para testes manuais e CI via Newman).
+- Scripts de performance: `tests/perf/k6_test.js` para testes de carga/smoke.
+
+CI / Deploy
+----------
+- Workflows GitHub Actions (CI) e scripts de segurança (Snyk) podem estar configurados em `.github/workflows/`.
+- `render.yaml` e `Dockerfile` estão incluídos para deploy no Render ou containerização.
+
+Observações finais
+------------------
+- Atualize `Colaboradores` se houver mudanças na equipe.
+- Preencha `URL pública` quando a API estiver publicada externamente.
+- Para documentação automática, verifique se existe um Swagger/OpenAPI em `swagger/`.
+
     
