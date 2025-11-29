@@ -21,7 +21,7 @@ Colaboradores
 
 URL pública (opcional)
 ---------------------
-[SWAGGER](https://mathapi.onrender.com)
+[SWAGGER](https://mathapi.onrender.com/docs)
 
 Tecnologias utilizadas
 ----------------------
