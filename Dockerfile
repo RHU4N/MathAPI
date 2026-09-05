@@ -1,8 +1,10 @@
-FROM node:18-alpine
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm ci --only=production
+FROM node:20-alpine
+
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 COPY . .
+
+ENV PORT=8080
 EXPOSE 8080
-ENV NODE_ENV=production
-CMD ["npm", "run", "dev"]
+CMD ["node", "index.js"]
