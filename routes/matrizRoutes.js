@@ -1,6 +1,7 @@
 const express = require('express');
 const CalculateMatrizUseCase = require('../domain/usecases/CalculateMatrizUseCase');
 const MatrizRepository = require('../infrastructure/repositories/MatrizRepository');
+const successResponse = require('../utils/successResponse');
 
 const router = express.Router();
 const matrizUseCase = new CalculateMatrizUseCase();
@@ -77,7 +78,7 @@ router.post('/:operacao', async (req, res) => {
         }
         const matriz = matrizUseCase.execute(operacao, a, b);
         matrizRepository.save({ operacao, a, b, matriz });
-        res.json({ operacao, matriz });
+        successResponse(res, { operacao, matriz });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

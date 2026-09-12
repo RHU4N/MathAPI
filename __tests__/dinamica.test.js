@@ -36,36 +36,36 @@ describe('Math API - /dinamica', () => {
     const payload = { m: 30, a: 10 };
     const res = await request(app).post('/dinamica/forca-resultante').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'grauspararadianos');
-    expect(res.body).toHaveProperty('resultado');
-    expect(typeof res.body.resultado).toBe('string');
-    expect(String(res.body.resultado)).toContain('300');
+    expect(res.body).toHaveProperty('data.resultado');
+    expect(typeof res.body.data.resultado).toBe('string');
+    expect(String(res.body.data.resultado)).toContain('300');
   });
 
   test('calcula peso', async () => {
     const payload = { m: 10 };
     const res = await request(app).post('/dinamica/peso').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
-    expect(res.body).toHaveProperty('resultado');
-    expect(typeof res.body.resultado).toBe('string');
-    expect(String(res.body.resultado)).toContain('98.1');
+    expect(res.body).toHaveProperty('data.resultado');
+    expect(typeof res.body.data.resultado).toBe('string');
+    expect(String(res.body.data.resultado)).toContain('98.1');
   });
 
   test('calcula forca atrito', async () => {
     const payload = { mu: 15, N: 12 };
     const res = await request(app).post('/dinamica/forca-atrito').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
-    expect(res.body).toHaveProperty('resultado');
-    expect(typeof res.body.resultado).toBe('string');
-    expect(String(res.body.resultado)).toContain('180');
+    expect(res.body).toHaveProperty('data.resultado');
+    expect(typeof res.body.data.resultado).toBe('string');
+    expect(String(res.body.data.resultado)).toContain('180');
   });
 
   test('calcula forca elastica', async () => {
     const payload = { k: 20, x: 75 };
     const res = await request(app).post('/dinamica/forca-elastica').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
-    expect(res.body).toHaveProperty('resultado');
-    expect(typeof res.body.resultado).toBe('string');
-    expect(String(res.body.resultado)).toContain('1500');
+    expect(res.body).toHaveProperty('data.resultado');
+    expect(typeof res.body.data.resultado).toBe('string');
+    expect(String(res.body.data.resultado)).toContain('1500');
   });
 
   test('validates missing parameters', async () => {

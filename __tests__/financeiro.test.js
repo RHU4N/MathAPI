@@ -12,41 +12,41 @@ describe('Math API - /financeiro', () => {
     const payload = { p: 30, v: 10 };
     const res = await request(app).post('/financeiro/variacao').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'grauspararadianos');
-    expect(res.body).toHaveProperty('resultado');
+    expect(res.body).toHaveProperty('data.resultado');
 
     // strategy returns a human-readable string; assert it's a string containing the numeric result
-    expect(typeof res.body.resultado).toBe('string');
-    expect(String(res.body.resultado)).toContain('0.3');
+    expect(typeof res.body.data.resultado).toBe('string');
+    expect(String(res.body.data.resultado)).toContain('0.3');
   });
 
   test('calcula variacao percentual', async () => {
     const payload = { vi: 25, vf: 28 };
     const res = await request(app).post('/financeiro/variacao-percentual').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
-    expect(res.body).toHaveProperty('resultado');
+    expect(res.body).toHaveProperty('data.resultado');
 
-    expect(typeof res.body.resultado).toBe('string');
-    expect(String(res.body.resultado)).toContain('12');
+    expect(typeof res.body.data.resultado).toBe('string');
+    expect(String(res.body.data.resultado)).toContain('12');
   });
 
   test('calcula juros simples', async () => {
     const payload = { c: 1200, i: 0.02, n:15 };
     const res = await request(app).post('/financeiro/juros/simples').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
-    expect(res.body).toHaveProperty('resultado');
+    expect(res.body).toHaveProperty('data.resultado');
 
-    expect(typeof res.body.resultado).toBe('string');
-    expect(String(res.body.resultado)).toContain('360');
+    expect(typeof res.body.data.resultado).toBe('string');
+    expect(String(res.body.data.resultado)).toContain('360');
   });
 
   test('calcula juros compostos', async () => {
     const payload = { c:5000, i: 0.01, t:6 };
     const res = await request(app).post('/financeiro/juros/compostos').send(payload).expect(200);
     //expect(res.body).toHaveProperty('tipo', 'radianosparagraus');
-    expect(res.body).toHaveProperty('resultado');
+    expect(res.body).toHaveProperty('data.resultado');
 
-    expect(typeof res.body.resultado).toBe('string');
-    expect(String(res.body.resultado)).toContain('5307');
+    expect(typeof res.body.data.resultado).toBe('string');
+    expect(String(res.body.data.resultado)).toContain('5307');
   });
 
   test('validates missing parameters', async () => {

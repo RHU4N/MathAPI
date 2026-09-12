@@ -1,6 +1,7 @@
 const express = require('express');
 const CalculateAreaUseCase = require('../domain/usecases/CalculateAreaUseCase');
 const AreaRepository = require('../infrastructure/repositories/AreaRepository');
+const successResponse = require('../utils/successResponse');
 
 const router = express.Router();
 const areaUseCase = new CalculateAreaUseCase();
@@ -151,7 +152,7 @@ router.post('/:forma', async (req, res) => {
         }
         const area = areaUseCase.execute(forma, dimensao);
         areaRepository.save({ forma, dimensao, area }); // Exemplo de uso do repositório
-        res.json({ forma, area });
+        successResponse(res, { forma, area });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

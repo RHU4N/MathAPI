@@ -1,6 +1,7 @@
 const express = require('express');
 const CalculateEstatisticaUseCase = require('../domain/usecases/CalculateEstatisticaUseCase');
 const EstatisticaRepository = require('../infrastructure/repositories/EstatisticaRepository');
+const successResponse = require('../utils/successResponse');
 
 const router = express.Router();
 const estatisticaUseCase = new CalculateEstatisticaUseCase();
@@ -72,7 +73,7 @@ router.post('/:tipo', async (req, res) => {
         }
         const resultado = estatisticaUseCase.execute(tipo, valores);
         estatisticaRepository.save({ tipo, valores, resultado });
-        res.json({ tipo, resultado });
+        successResponse(res, { tipo, resultado });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

@@ -1,6 +1,7 @@
 const express = require('express');
 const CalculatePerimetroUseCase = require('../domain/usecases/CalculatePerimetroUseCase');
 const PerimetroRepository = require('../infrastructure/repositories/PerimetroRepository');
+const successResponse = require('../utils/successResponse');
 
 const router = express.Router();
 const perimetroUseCase = new CalculatePerimetroUseCase();
@@ -82,7 +83,7 @@ router.post('/:forma', async (req, res) => {
         }
         const perimetro = perimetroUseCase.execute(forma, dimensao);
         perimetroRepository.save({ forma, dimensao, perimetro });
-        res.json({ forma, perimetro });
+        successResponse(res, { forma, perimetro });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

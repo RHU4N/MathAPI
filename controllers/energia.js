@@ -3,6 +3,7 @@ const router = express.Router();
 
 const EnergiaRepository = require('../infrastructure/repositories/EnergiaRepository');
 const CalculateEnergiaUseCase = require('../domain/usecases/CalculateEnergiaUseCase');
+const successResponse = require('../utils/successResponse');
 
 const repo = new EnergiaRepository();
 const usecase = new CalculateEnergiaUseCase(repo);
@@ -29,7 +30,7 @@ const handle = (action) => async (req, res) => {
             if (missing.length) throw new Error('Parâmetros obrigatórios faltando: ' + missing.join(', '));
         }
         const result = await usecase.execute(action, req.body);
-        return res.json(result);
+        return successResponse(res, result);
     } catch (error) {
         const { status, msg } = mapErrorToResponse(error);
         return res.status(status).json({ error: msg });

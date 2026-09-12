@@ -3,6 +3,7 @@ const express = require('express');
 // Factory: createFuncaoRouter({ useCase, repository })
 const CalculateFuncaoUseCase = require('../domain/usecases/CalculateFuncaoUseCase');
 const FuncaoRepository = require('../infrastructure/repositories/FuncaoRepository');
+const successResponse = require('../utils/successResponse');
 
 function createFuncaoRouter(deps = {}) {
     const router = express.Router();
@@ -114,7 +115,7 @@ router.post('/:tipo', async (req, res) => {
         if (funcaoRepository && typeof funcaoRepository.save === 'function') {
             await funcaoRepository.save({ tipo, params, resultado });
         }
-        res.json({ tipo, resultado });
+        successResponse(res, { tipo, resultado });
     } catch (error) {
         const msg = error && error.message ? String(error.message) : 'Erro interno no servidor';
         const lower = msg.toLowerCase();
