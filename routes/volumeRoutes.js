@@ -1,6 +1,7 @@
 const express = require('express');
 const CalculateVolumeUseCase = require('../domain/usecases/CalculateVolumeUseCase');
 const VolumeRepository = require('../infrastructure/repositories/VolumeRepository');
+const successResponse = require('../utils/successResponse');
 
 const router = express.Router();
 const volumeUseCase = new CalculateVolumeUseCase();
@@ -85,7 +86,7 @@ router.post('/:forma', async (req, res) => {
         }
         const volume = volumeUseCase.execute(forma, dimensao);
         volumeRepository.save({ forma, dimensao, volume });
-        res.json({ forma, volume });
+        successResponse(res, { forma, volume });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

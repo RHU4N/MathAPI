@@ -27,6 +27,7 @@ const dinamicaRoutes = require('./routes/dinamicaRoutes');
 const energiaRoutes = require('./routes/energiaRoutes');
 const solucoesRoutes = require('./routes/solucoesRoutes');
 const financeiroRoutes = require('./routes/financeiroRoutes');
+const successResponse = require('./utils/successResponse');
 
 function createApp() {
   const app = express();
@@ -35,7 +36,7 @@ function createApp() {
   app.use(cors());
 
   // Health
-  app.get('/', (req, res) => res.send('Estou aqui'));
+  app.get('/', (req, res) => successResponse(res, null, 'API disponível'));
 
   // Create usecases and repositories (composition root)
   const anguloUseCase = new CalculateAnguloUseCase();

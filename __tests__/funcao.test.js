@@ -11,18 +11,18 @@ describe('Math API - /funcao', () => {
   test('calculates linear function (ax + b) when x provided', async () => {
     const payload = { a: 2, b: 3, x: 5 };
     const res = await request(app).post('/funcao/linear').send(payload).expect(200);
-    expect(res.body).toHaveProperty('tipo', 'linear');
-    expect(res.body).toHaveProperty('resultado');
-    expect(typeof res.body.resultado).toBe('number');
-    expect(res.body.resultado).toBe(2 * 5 + 3);
+    expect(res.body).toHaveProperty('data.tipo', 'linear');
+    expect(res.body).toHaveProperty('data.resultado');
+    expect(typeof res.body.data.resultado).toBe('number');
+    expect(res.body.data.resultado).toBe(2 * 5 + 3);
   });
 
   test('returns roots for quadratic when x is not the target (solving for x) or when x provided returns value', async () => {
     // Evaluate quadratic for a given x
     const evalPayload = { a: 1, b: -3, c: 2, x: 4 };
     const r1 = await request(app).post('/funcao/quadratica').send(evalPayload).expect(200);
-    expect(r1.body).toHaveProperty('tipo', 'quadratica');
-    expect(r1.body).toHaveProperty('resultado');
+    expect(r1.body).toHaveProperty('data.tipo', 'quadratica');
+    expect(r1.body).toHaveProperty('data.resultado');
 
     // Solve quadratic (if API supports solving - adapt if necessary)
     const solvePayload = { a: 1, b: -3, c: 2 }; // no x => may return raizes

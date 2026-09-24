@@ -3,6 +3,7 @@ const router = express.Router();
 
 const SolucoesRepository = require('../infrastructure/repositories/SolucoesRepository');
 const CalculateSolucoesUseCase = require('../domain/usecases/CalculateSolucoesUseCase');
+const successResponse = require('../utils/successResponse');
 
 const repo = new SolucoesRepository();
 const usecase = new CalculateSolucoesUseCase(repo);
@@ -30,7 +31,7 @@ const handle = (action) => async (req, res) => {
             if (missing.length) throw new Error('Parâmetros obrigatórios faltando: ' + missing.join(', '));
         }
         const result = await usecase.execute(action, req.body);
-        return res.json(result);
+        return successResponse(res, result);
     } catch (error) {
         const { status, msg } = mapErrorToResponse(error);
         return res.status(status).json({ error: msg });

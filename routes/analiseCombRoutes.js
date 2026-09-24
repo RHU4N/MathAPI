@@ -1,6 +1,7 @@
 const express = require('express');
 const CalculateAnaliseCombUseCase = require('../domain/usecases/CalculateAnaliseCombUseCase');
 const AnaliseCombRepository = require('../infrastructure/repositories/AnaliseCombRepository');
+const successResponse = require('../utils/successResponse');
 
 const router = express.Router();
 const analiseUseCase = new CalculateAnaliseCombUseCase();
@@ -71,7 +72,7 @@ router.post('/:tipo', async (req, res) => {
         }
         const resultado = analiseUseCase.execute(tipo, params);
         analiseRepository.save({ tipo, params, resultado });
-        res.json({ tipo, resultado });
+        successResponse(res, { tipo, resultado });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

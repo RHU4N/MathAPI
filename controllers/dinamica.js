@@ -3,6 +3,7 @@ const router = express.Router();
 
 const DinamicaRepository = require('../infrastructure/repositories/DinamicaRepository');
 const CalculateDinamicaUseCase = require('../domain/usecases/CalculateDinamicaUseCase');
+const successResponse = require('../utils/successResponse');
 
 const repo = new DinamicaRepository();
 const usecase = new CalculateDinamicaUseCase(repo);
@@ -28,7 +29,7 @@ const handle = (action) => async (req, res) => {
             if (missing.length) throw new Error('Parâmetros obrigatórios faltando: ' + missing.join(', '));
         }
         const result = await usecase.execute(action, req.body);
-        return res.json(result);
+        return successResponse(res, result);
     } catch (error) {
         const { status, msg } = mapErrorToResponse(error);
         return res.status(status).json({ error: msg });

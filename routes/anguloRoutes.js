@@ -5,6 +5,7 @@ const express = require('express');
 
 const CalculateAnguloUseCase = require('../domain/usecases/CalculateAnguloUseCase');
 const AnguloRepository = require('../infrastructure/repositories/AnguloRepository');
+const successResponse = require('../utils/successResponse');
 
 function createAnguloRouter(deps = {}) {
     const router = express.Router();
@@ -77,7 +78,7 @@ router.post('/:tipo', async (req, res) => {
         }
         const resultado = anguloUseCase.execute(tipo, valor);
         anguloRepository.save({ tipo, valor, resultado });
-        res.json({ tipo, resultado });
+        successResponse(res, { tipo, resultado });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
