@@ -48,12 +48,20 @@ function createAnguloRouter(deps = {}) {
  *                  schema:
  *                    type: object
  *                    properties:
- *                      tipo:
+ *                      success:
+ *                        type: boolean
+ *                        example: true
+ *                      message:
  *                        type: string
- *                        example: grauspararadianos
- *                      resultado:
- *                        type: number
- *                        example: 3.14159
+ *                      data:
+ *                        type: object
+ *                        properties:
+ *                          tipo:
+ *                            type: string
+ *                            example: grauspararadianos
+ *                          resultado:
+ *                            type: number
+ *                            example: 3.14159
  *          400:
  *              description: Erro de validação ou tipo inválido
  *              content:

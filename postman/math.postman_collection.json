@@ -51,8 +51,14 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
-              "pm.test('Has resultado number', function () { var json = pm.response.json(); pm.expect(json).to.have.property('resultado'); pm.expect(typeof json.resultado).to.eql('number'); });"
+              "pm.test('Retorna envelope e conversão correta', function () {",
+              "  pm.response.to.have.status(200);",
+              "  const json = pm.response.json();",
+              "  pm.expect(json.success).to.eql(true);",
+              "  pm.expect(json.data).to.have.property('resultado');",
+              "  pm.expect(json.data.resultado).to.be.a('number');",
+              "  pm.expect(json.data.resultado).to.be.closeTo(180, 0.000001);",
+              "});"
             ]
           }
         }
@@ -88,8 +94,13 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
-              "pm.test('Has resultado', function () { var json = pm.response.json(); pm.expect(json).to.have.property('resultado'); });"
+              "pm.test('Retorna envelope e resultado linear correto', function () {",
+              "  pm.response.to.have.status(200);",
+              "  const json = pm.response.json();",
+              "  pm.expect(json.success).to.eql(true);",
+              "  pm.expect(json.data).to.include({ tipo: 'linear', resultado: 13 });",
+              "  pm.expect(json.data.resultado).to.be.a('number');",
+              "});"
             ]
           }
         }

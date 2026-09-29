@@ -47,12 +47,20 @@ const estatisticaRepository = new EstatisticaRepository();
  *                  schema:
  *                    type: object
  *                    properties:
- *                      tipo:
+ *                      success:
+ *                        type: boolean
+ *                        example: true
+ *                      message:
  *                        type: string
- *                        example: media
- *                      resultado:
- *                        type: number
- *                        example: 30
+ *                      data:
+ *                        type: object
+ *                        properties:
+ *                          tipo:
+ *                            type: string
+ *                            example: media
+ *                          resultado:
+ *                            type: number
+ *                            example: 30
  *          400:
  *              description: Erro de validação ou tipo inválido
  *              content:

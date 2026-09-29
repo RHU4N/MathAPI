@@ -71,12 +71,21 @@ function createFuncaoRouter(deps = {}) {
  *             schema:
  *               type: object
  *               properties:
- *                 tipo:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
  *                   type: string
- *                   example: "linear"
- *                 resultado:
- *                   type: number
- *                   example: 13
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     tipo:
+ *                       type: string
+ *                       example: "linear"
+ *                     resultado:
+ *                       oneOf:
+ *                         - type: number
+ *                         - type: object
  *       400:
  *         description: Erro nos parâmetros ou tipo inválido
  *         content:
