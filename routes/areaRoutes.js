@@ -126,12 +126,20 @@ const areaRepository = new AreaRepository();
  *             schema:
  *               type: object
  *               properties:
- *                 forma:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
  *                   type: string
- *                   example: quadrado
- *                 area:
- *                   type: number
- *                   example: 25
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     forma:
+ *                       type: string
+ *                       example: quadrado
+ *                     area:
+ *                       type: number
+ *                       example: 25
  *       400:
  *         description: Erro de validação ou dimensões faltando
  *         content:

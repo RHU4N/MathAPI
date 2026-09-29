@@ -46,12 +46,20 @@ const analiseRepository = new AnaliseCombRepository();
  *                  schema:
  *                    type: object
  *                    properties:
- *                      tipo:
+ *                      success:
+ *                        type: boolean
+ *                        example: true
+ *                      message:
  *                        type: string
- *                        example: combinacao
- *                      resultado:
- *                        type: number
- *                        example: 10
+ *                      data:
+ *                        type: object
+ *                        properties:
+ *                          tipo:
+ *                            type: string
+ *                            example: combinacao
+ *                          resultado:
+ *                            type: number
+ *                            example: 10
  *          400:
  *              description: Erro de validação ou tipo inválido
  *              content:

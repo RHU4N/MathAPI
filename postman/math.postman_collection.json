@@ -105,6 +105,36 @@
           }
         }
       ]
+    },
+    {
+      "name": "Area - retangulo",
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"largura\": 5,\n  \"altura\": 10\n}" }, "url": "{{baseUrl}}/area/retangulo" },
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('Área retorna envelope e número corretos', function () { const json = pm.response.json(); pm.response.to.have.status(200); pm.expect(json.success).to.eql(true); pm.expect(json.message).to.be.a('string'); pm.expect(json.data.area).to.eql(50); pm.expect(json.data.area).to.be.a('number'); });"] } }]
+    },
+    {
+      "name": "Estatistica - media",
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"valores\": [1, 2, 3]\n}" }, "url": "{{baseUrl}}/estatistica/media" },
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('Estatística retorna envelope e média correta', function () { const json = pm.response.json(); pm.response.to.have.status(200); pm.expect(json.success).to.eql(true); pm.expect(json.message).to.be.a('string'); pm.expect(json.data.resultado).to.eql(2); pm.expect(json.data.resultado).to.be.a('number'); });"] } }]
+    },
+    {
+      "name": "Analise combinatoria - combinacao",
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"n\": 5,\n  \"k\": 2\n}" }, "url": "{{baseUrl}}/analise/combinacao" },
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('Análise combinatória retorna combinação correta', function () { const json = pm.response.json(); pm.response.to.have.status(200); pm.expect(json.success).to.eql(true); pm.expect(json.message).to.be.a('string'); pm.expect(json.data.resultado).to.eql(10); pm.expect(json.data.resultado).to.be.a('number'); });"] } }]
+    },
+    {
+      "name": "Fisica - cinetica MRU",
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"s0\": 0,\n  \"v\": 10,\n  \"t\": 5\n}" }, "url": "{{baseUrl}}/cinetica/mru" },
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('Cinética retorna texto de resultado correto', function () { const json = pm.response.json(); pm.response.to.have.status(200); pm.expect(json.success).to.eql(true); pm.expect(json.message).to.be.a('string'); pm.expect(json.data.resultado).to.be.a('string'); pm.expect(json.data.resultado).to.include('= 50'); });"] } }]
+    },
+    {
+      "name": "Quimica - densidade",
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"massa\": 10,\n  \"volume\": 2\n}" }, "url": "{{baseUrl}}/solucoes/densidade" },
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('Química retorna densidade correta', function () { const json = pm.response.json(); pm.response.to.have.status(200); pm.expect(json.success).to.eql(true); pm.expect(json.message).to.be.a('string'); pm.expect(json.data.resultado).to.be.a('string'); pm.expect(json.data.resultado).to.include('= 5 g/mL'); });"] } }]
+    },
+    {
+      "name": "Financeiro - variacao",
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"p\": 10,\n  \"v\": 100\n}" }, "url": "{{baseUrl}}/financeiro/variacao" },
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('Financeiro retorna variação correta', function () { const json = pm.response.json(); pm.response.to.have.status(200); pm.expect(json.success).to.eql(true); pm.expect(json.message).to.be.a('string'); pm.expect(json.data.resultado).to.be.a('string'); pm.expect(json.data.resultado).to.include('= 0.1'); });"] } }]
     }
   ]
 }
