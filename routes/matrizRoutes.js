@@ -73,14 +73,16 @@ router.post('/:operacao', async (req, res) => {
     try {
         const { operacao } = req.params;
         const { a, b } = req.body;
+
         if (!operacao || !a || !b) {
             return res.status(400).json({ error: 'Operação e matrizes são obrigatórias.' });
         }
+
         const matriz = matrizUseCase.execute(operacao, a, b);
         matrizRepository.save({ operacao, a, b, matriz });
-        successResponse(res, { operacao, matriz });
+        return successResponse(res, { operacao, matriz });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        return res.status(400).json({ error: error.message });
     }
 });
 
