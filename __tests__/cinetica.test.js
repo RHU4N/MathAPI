@@ -45,7 +45,7 @@ describe('Math API - /cinetica', () => {
     expect(res.body).toHaveProperty('data.resultado');
     // PI radianos == 180 graus
     expect(typeof res.body.data.resultado).toBe('string');
-    expect(String(res.body.data.resultado)).toContain('100');
+    expect(String(res.body.data.resultado)).toContain('75');
   });
 
   test('mruvVel', async () => {

@@ -1,9 +1,9 @@
 module.exports = {
     
     'variacao': ({ p, v } = {}) => {
-        // tests expect the percentage expressed as decimal (p/100)
-        const value = p / 100;
-        return `Variação (decimal) = ${p} / 100 = ${value}`;
+        const decimal = p / 100;
+        const value = decimal * v;
+        return `Variação = (p / 100) * v = (${p} / 100) * ${v} = ${decimal} * ${v} = ${value}`;
     },
     'variacao-percentual': ({ vi, vf } = {}) => {
         const diferenca = vf - vi;

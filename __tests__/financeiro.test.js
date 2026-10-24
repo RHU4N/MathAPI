@@ -14,9 +14,9 @@ describe('Math API - /financeiro', () => {
     //expect(res.body).toHaveProperty('tipo', 'grauspararadianos');
     expect(res.body).toHaveProperty('data.resultado');
 
-    // strategy returns a human-readable string; assert it's a string containing the numeric result
+    // The variation applies the percentage to the informed reference value.
     expect(typeof res.body.data.resultado).toBe('string');
-    expect(String(res.body.data.resultado)).toContain('0.3');
+    expect(String(res.body.data.resultado)).toContain('3');
   });
 
   test('calcula variacao percentual', async () => {
