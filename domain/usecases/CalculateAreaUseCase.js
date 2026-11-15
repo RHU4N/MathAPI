@@ -2,6 +2,12 @@ const Area = require('../entities/Area');
 
 class CalculateAreaUseCase {
     execute(forma, dimensao) {
+        const dimensions = ['lado', 'altura', 'largura', 'basemaior', 'basemenor', 'raio', 'diagonalMaior', 'diagonalMenor', 'base'];
+        for (const key of dimensions) {
+            if (dimensao[key] !== undefined && (!Number.isFinite(dimensao[key]) || dimensao[key] <= 0)) {
+                throw new Error(`A dimensão "${key}" deve ser um número finito maior que zero.`);
+            }
+        }
         let result;
         switch (forma.toLowerCase()) {
             case 'quadrado':

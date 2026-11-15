@@ -31,4 +31,22 @@ describe('Math API - /funcao', () => {
     expect([200, 400, 422]).toContain(r2.status);
     expect(r2.headers['content-type']).toMatch(/application\/json/);
   });
+
+  test('rejects an unsupported function as client input', async () => {
+    const res = await request(app).post('/funcao/inexistente').send({ a: 2, b: 3 }).expect(400);
+    expect(res.body.error).toMatch(/Tipo/);
+  });
+
+  test.each(['linear', 'quadratica'])('rejects an invalid x instead of solving %s', async tipo => {
+    for (const x of ['5', null, {}, []]) {
+      await request(app).post(`/funcao/${tipo}`).send({ a: 1, b: -3, c: 2, x }).expect(422);
+    }
+  });
+
+  test('keeps CORS on malformed JSON responses', async () => {
+    const res = await request(app).post('/funcao/linear').set('Content-Type', 'application/json')
+      .set('Origin', 'https://ceos-puce.vercel.app').send('{"a":').expect(400);
+    expect(res.headers['access-control-allow-origin']).toBe('*');
+    expect(res.body.error).toBeTruthy();
+  });
 });
