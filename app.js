@@ -32,8 +32,8 @@ const successResponse = require('./utils/successResponse');
 function createApp() {
   const app = express();
 
-  app.use(bodyParser.json());
   app.use(cors());
+  app.use(bodyParser.json());
 
   // Health
   app.get('/', (req, res) => successResponse(res, null, 'API disponível'));

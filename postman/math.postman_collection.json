@@ -135,6 +135,26 @@
       "name": "Financeiro - variacao",
       "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"p\": 10,\n  \"v\": 100\n}" }, "url": "{{baseUrl}}/financeiro/variacao" },
       "event": [{ "listen": "test", "script": { "exec": ["pm.test('Financeiro retorna variação correta', function () { const json = pm.response.json(); pm.response.to.have.status(200); pm.expect(json.success).to.eql(true); pm.expect(json.message).to.be.a('string'); pm.expect(json.data.resultado).to.be.a('string'); pm.expect(json.data.resultado).to.include('= 0.1'); });"] } }]
+    },
+    {
+      "name": "Validation - unknown function",
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"a\":2,\"b\":3}" }, "url": "{{baseUrl}}/funcao/inexistente" },
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('Unknown function is a client error', function () { pm.response.to.have.status(400); pm.expect(pm.response.json().error).to.be.a('string'); });"] } }]
+    },
+    {
+      "name": "Validation - invalid x",
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"a\":2,\"b\":3,\"x\":\"5\"}" }, "url": "{{baseUrl}}/funcao/linear" },
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('Invalid x cannot silently solve roots', function () { pm.response.to.have.status(422); pm.expect(pm.response.json().error).to.be.a('string'); });"] } }]
+    },
+    {
+      "name": "Validation - negative dimensions",
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"largura\":-5,\"altura\":10}" }, "url": "{{baseUrl}}/area/retangulo" },
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('Negative dimensions cannot produce an area', function () { pm.response.to.have.status(400); pm.expect(pm.response.json().error).to.be.a('string'); });"] } }]
+    },
+    {
+      "name": "Validation - malformed JSON preserves CORS",
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Origin", "value": "https://ceos-puce.vercel.app" }], "body": { "mode": "raw", "raw": "{\"a\":" }, "url": "{{baseUrl}}/funcao/linear" },
+      "event": [{ "listen": "test", "script": { "exec": ["pm.test('Malformed JSON remains readable to browser clients', function () { pm.response.to.have.status(400); pm.expect(pm.response.json().error).to.be.a('string'); pm.expect(pm.response.headers.get('Access-Control-Allow-Origin')).to.eql('*'); });"] } }]
     }
   ]
 }

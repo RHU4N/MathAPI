@@ -108,14 +108,20 @@ router.post('/:tipo', async (req, res) => {
 
         // Basic numeric validation depending on type
         const t = String(tipo).toLowerCase();
+        if (!['linear', 'quadratica'].includes(t)) {
+            return res.status(400).json({ error: 'Tipo de função não encontrado' });
+        }
+        if (params.x !== undefined && !Number.isFinite(params.x)) {
+            return res.status(422).json({ error: 'O parâmetro x deve ser um número finito quando informado.' });
+        }
         if (t === 'linear') {
             const { a, b } = params;
-            if ([a, b].some(v => v === undefined || typeof v !== 'number')) {
+            if ([a, b].some(v => !Number.isFinite(v))) {
                 return res.status(422).json({ error: 'Parâmetros inválidos para função linear. a e b são obrigatórios e devem ser números. x é opcional (se ausente será resolvido).' });
             }
         } else if (t === 'quadratica') {
             const { a, b, c } = params;
-            if ([a, b, c].some(v => v === undefined || typeof v !== 'number')) {
+            if ([a, b, c].some(v => !Number.isFinite(v))) {
                 return res.status(422).json({ error: 'Parâmetros inválidos para função quadrática. a, b e c são obrigatórios e devem ser números. x é opcional (se ausente será resolvido).' });
             }
         }
