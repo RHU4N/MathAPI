@@ -14,7 +14,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '24'
       - name: Install
         run: npm ci
       - name: Run tests
@@ -30,11 +30,11 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '24'
 
       - name: Install dependencies (mathApi)
         run: |
-          npm install --no-audit --no-fund
+          npm ci --no-audit --no-fund
 
       - name: Start mathApi server
         run: |
@@ -50,7 +50,7 @@ jobs:
           if [ $n -ge 30 ]; then
             echo "Server did not start in time"
             echo "---- server.log ----"
-            tail -n 200 ./server.log || true
+            tail -n 60 ./server.log || true
             exit 1
           fi
 
@@ -58,11 +58,11 @@ jobs:
         run: |
           npm install newman --no-save
           echo "---- server.log (head) ----"
-          head -n 200 ./server.log || true
+          head -n 20 ./server.log || true
           npx newman run postman/math.postman_collection.json -e postman/math.postman_environment.json --timeout-request 15000 --bail || {
             echo "Newman failed; dumping server.log";
             echo "---- server.log (full) ----";
-            tail -n +1 ./server.log || true;
+            tail -n 60 ./server.log || true;
             exit 1;
           }
 
@@ -85,10 +85,10 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '24'
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Start mathApi server
         run: |
@@ -109,7 +109,7 @@ jobs:
             echo "waiting for service... ($i)"; sleep 2
           done
           echo "::error::service did not become ready in time"
-          tail -n 200 ./server.log || true
+          tail -n 60 ./server.log || true
           exit 1
 
       - name: Install Newman
@@ -118,18 +118,18 @@ jobs:
       - name: Run Newman collection (math)
         run: |
           echo "---- server.log (head) ----"
-          head -n 200 ./server.log || true
+          head -n 20 ./server.log || true
           ./node_modules/.bin/newman run postman/math.postman_collection.json -e postman/math.postman_environment.json --timeout-request 15000 --bail || {
             echo "Newman failed; dumping server.log";
             echo "---- server.log (full) ----";
-            tail -n +1 ./server.log || true;
+            tail -n 60 ./server.log || true;
             exit 1;
           }
 
       - name: Run extra infra checks (run-tests.js)
         run: |
           if [ -f run-tests.js ]; then
-            node run-tests.js || (echo "run-tests.js failed"; tail -n 200 ./server.log || true; exit 1)
+            node run-tests.js || (echo "run-tests.js failed"; tail -n 60 ./server.log || true; exit 1)
           else
             echo "No run-tests.js present; skipping"
           fi
