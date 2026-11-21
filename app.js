@@ -26,6 +26,9 @@ const cineticaRoutes = require('./routes/cineticaRoutes');
 const dinamicaRoutes = require('./routes/dinamicaRoutes');
 const energiaRoutes = require('./routes/energiaRoutes');
 const solucoesRoutes = require('./routes/solucoesRoutes');
+const estequiometriaRoutes = require('./routes/estequiometriaRoutes');
+const termoquimicaRoutes = require('./routes/termoquimicaRoutes');
+const termologiaRoutes = require('./routes/termologiaRoutes');
 const financeiroRoutes = require('./routes/financeiroRoutes');
 const successResponse = require('./utils/successResponse');
 
@@ -63,6 +66,9 @@ function createApp() {
   app.use('/dinamica', dinamicaRoutes);
   app.use('/energia', energiaRoutes);
   app.use('/solucoes', solucoesRoutes);
+  app.use('/estequiometria', estequiometriaRoutes);
+  app.use('/termoquimica', termoquimicaRoutes);
+  app.use('/termologia', termologiaRoutes);
 
   // Swagger
   setupSwagger(app);

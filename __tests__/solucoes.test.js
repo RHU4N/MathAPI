@@ -1,5 +1,6 @@
 const request = require('supertest');
 const { createApp } = require('../app');
+const solucoesStrategies = require('../domain/usecases/strategies/solucoes');
 
 describe('Math API - /solucoes', () => {
   let app;
@@ -83,5 +84,31 @@ describe('Math API - /solucoes', () => {
   test('validates missing parameters', async () => {
     const res = await request(app).post('/solucoes/molaridade').send({}).expect(400);
     expect(res.body).toHaveProperty('error');
+  });
+
+  test('rejeita divisão por zero e valores inválidos com HTTP 400', async () => {
+    const r1 = await request(app).post('/solucoes/concentracao-comum').send({ soluto: 10, volume: 0 }).expect(400);
+    expect(r1.body).toHaveProperty('error');
+
+    const r2 = await request(app).post('/solucoes/molaridade').send({ soluto: 2, volume: 0 }).expect(400);
+    expect(r2.body).toHaveProperty('error');
+
+    const r3 = await request(app).post('/solucoes/molalidade').send({ soluto: 2, solvente: 0 }).expect(400);
+    expect(r3.body).toHaveProperty('error');
+
+    const r4 = await request(app).post('/solucoes/fracao-molar').send({ n1: 0, n2: 0 }).expect(400);
+    expect(r4.body).toHaveProperty('error');
+
+    const r5 = await request(app).post('/solucoes/densidade').send({ massa: 10, volume: 0 }).expect(400);
+    expect(r5.body).toHaveProperty('error');
+
+    const r6 = await request(app).post('/solucoes/concentracao-comum').send({ soluto: -1, volume: 2 }).expect(400);
+    expect(r6.body).toHaveProperty('error');
+
+    const r7 = await request(app).post('/solucoes/densidade').send({ massa: -5, volume: 2 }).expect(400);
+    expect(r7.body).toHaveProperty('error');
+
+    expect(() => solucoesStrategies['molaridade']({ soluto: NaN, volume: 1 })).toThrow(/deve|Parâmetro/);
+    expect(() => solucoesStrategies['densidade']({ massa: 10, volume: Infinity })).toThrow(/deve|Parâmetro/);
   });
 });
