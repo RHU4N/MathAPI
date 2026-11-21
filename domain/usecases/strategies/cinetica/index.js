@@ -2,6 +2,9 @@ module.exports = {
     'velocidade': ({ s0, sf, t0, tf } = {}) => {
         const deltaS = sf - s0;
         const deltaT = tf - t0;
+        if (deltaT === 0) {
+            throw new Error('O intervalo de tempo deve ser diferente de zero.');
+        }
         const value = deltaS / deltaT;
         return `Velocidade média = Δs / Δt = ${deltaS} / ${deltaT} = ${value}`;
     },
@@ -28,6 +31,9 @@ module.exports = {
         return `Velocidade final (Torricelli): v^2 = v0^2 + 2 * a * (s - s0) = ${Math.pow(v0, 2)} + 2 * ${a} * (${s} - ${s0}) = ${value} (após raiz quadrada)`;
     },
     'mcu-velocidade-angular': ({ periodo } = {}) => {
+        if (periodo === 0) {
+            throw new Error('O período deve ser diferente de zero.');
+        }
         const value = 2 * Math.PI / periodo;
         return `Velocidade angular = 2π / T = 2 * ${Math.PI.toFixed(2)} / ${periodo} = ${value}`;
     },
