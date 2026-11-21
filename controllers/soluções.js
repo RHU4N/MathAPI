@@ -18,6 +18,7 @@ function mapErrorToResponse(error) {
 
 const handle = (action) => async (req, res) => {
     try {
+        const body = req.body && typeof req.body === 'object' ? req.body : {};
         const requiredMap = {
             'concentracao-comum': ['soluto','volume'],
             molaridade: ['soluto','volume'],
@@ -27,10 +28,10 @@ const handle = (action) => async (req, res) => {
         };
         const required = requiredMap[action];
         if (required) {
-            const missing = required.filter(k => req.body[k] === undefined || typeof req.body[k] !== 'number');
-            if (missing.length) throw new Error('Parâmetros obrigatórios faltando: ' + missing.join(', '));
+            const missing = required.filter(k => body[k] === undefined || typeof body[k] !== 'number' || !Number.isFinite(body[k]));
+            if (missing.length) throw new Error('Parâmetros obrigatórios faltando ou inválidos: ' + missing.join(', '));
         }
-        const result = await usecase.execute(action, req.body);
+        const result = await usecase.execute(action, body);
         return successResponse(res, result);
     } catch (error) {
         const { status, msg } = mapErrorToResponse(error);
