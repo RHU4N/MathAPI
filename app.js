@@ -31,11 +31,13 @@ const termoquimicaRoutes = require('./routes/termoquimicaRoutes');
 const termologiaRoutes = require('./routes/termologiaRoutes');
 const financeiroRoutes = require('./routes/financeiroRoutes');
 const successResponse = require('./utils/successResponse');
+const { errorResponse, errorHandler, standardizeErrors } = require('./utils/errorResponse');
 
 function createApp() {
   const app = express();
 
   app.use(cors());
+  app.use(standardizeErrors);
   app.use(bodyParser.json());
 
   // Health
@@ -73,13 +75,11 @@ function createApp() {
   // Swagger
   setupSwagger(app);
 
-  // Global error handler
-  // eslint-disable-next-line no-unused-vars
-  app.use((err, req, res, next) => {
-    console.error(err && err.stack ? err.stack : err);
-    const status = err && err.status ? err.status : 500;
-    res.status(status).json({ error: (err && err.message) || 'Erro interno no servidor' });
-  });
+  // Rota inexistente
+  app.use((req, res) => errorResponse(res, 404, 'Endpoint não encontrado'));
+
+  // Erro não tratado (JSON inválido, exceções)
+  app.use(errorHandler);
 
   return app;
 }

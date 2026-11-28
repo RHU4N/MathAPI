@@ -1,6 +1,13 @@
 const request = require('supertest');
 const { createApp } = require('../app');
 
+function expectStandardError(response) {
+  expect(response.body).toEqual({
+    success: false,
+    error: { code: expect.any(String), message: expect.stringMatching(/\S/), statusCode: response.status },
+  });
+}
+
 const auditFailures = [
   ['arranjo com repetição sem parâmetros', '/analise/arranjorep', {}],
   ['arranjo com repetição não finito', '/analise/arranjorep', { n: 'Infinity', k: 2 }],
@@ -18,8 +25,7 @@ describe('regressões reproduzidas na auditoria funcional de 21/11/2026', () => 
   test.each(auditFailures)('%s retorna erro de validação, sem sucesso não finito', async (_name, endpoint, body) => {
     const response = await request(app).post(endpoint).set('Origin', 'http://localhost:8082').send(body);
     expect(response.status).toBe(400);
-    expect(response.body.error).toEqual(expect.any(String));
-    expect(response.body.error.length).toBeGreaterThan(0);
+    expectStandardError(response);
     expect(response.body.success).not.toBe(true);
     expect(response.body).not.toHaveProperty('data');
     expect(response.headers['access-control-allow-origin']).toBe('*');
@@ -33,7 +39,7 @@ describe('regressões reproduzidas na auditoria funcional de 21/11/2026', () => 
     ['/estatistica/mediana', { valores: [null, 2] }],
   ])('%s rejeita domínio inválido sem coerção ou resultado não finito', async (endpoint, body) => {
     const response = await request(app).post(endpoint).send(body).expect(400);
-    expect(response.body.error).toEqual(expect.any(String));
+    expectStandardError(response);
     expect(response.body.success).not.toBe(true);
   });
 

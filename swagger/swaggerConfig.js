@@ -24,7 +24,13 @@ const options = {
             'application/json': {
               schema: {
                 type: 'object',
-                properties: { error: { type: 'string', example: 'Parâmetros inválidos ou ausentes' } }
+                properties: {
+                  success: { type: 'boolean', example: false },
+                  error: {
+                    type: 'object',
+                    properties: { code: { type: 'string', example: 'VALIDATION_ERROR' }, message: { type: 'string', example: 'Parâmetros inválidos ou ausentes' }, statusCode: { type: 'integer', example: 400 } }
+                  }
+                }
               }
             }
           }
@@ -35,7 +41,13 @@ const options = {
             'application/json': {
               schema: {
                 type: 'object',
-                properties: { error: { type: 'string', example: 'Token não fornecido' } }
+                properties: {
+                  success: { type: 'boolean', example: false },
+                  error: {
+                    type: 'object',
+                    properties: { code: { type: 'string', example: 'UNAUTHORIZED' }, message: { type: 'string', example: 'Token não fornecido' }, statusCode: { type: 'integer', example: 401 } }
+                  }
+                }
               }
             }
           }
@@ -46,7 +58,13 @@ const options = {
             'application/json': {
               schema: {
                 type: 'object',
-                properties: { error: { type: 'string', example: 'Acesso negado' } }
+                properties: {
+                  success: { type: 'boolean', example: false },
+                  error: {
+                    type: 'object',
+                    properties: { code: { type: 'string', example: 'FORBIDDEN' }, message: { type: 'string', example: 'Acesso negado' }, statusCode: { type: 'integer', example: 403 } }
+                  }
+                }
               }
             }
           }
@@ -57,7 +75,13 @@ const options = {
             'application/json': {
               schema: {
                 type: 'object',
-                properties: { error: { type: 'string', example: 'Recurso não encontrado' } }
+                properties: {
+                  success: { type: 'boolean', example: false },
+                  error: {
+                    type: 'object',
+                    properties: { code: { type: 'string', example: 'NOT_FOUND' }, message: { type: 'string', example: 'Recurso não encontrado' }, statusCode: { type: 'integer', example: 404 } }
+                  }
+                }
               }
             }
           }
@@ -68,7 +92,13 @@ const options = {
             'application/json': {
               schema: {
                 type: 'object',
-                properties: { error: { type: 'string', example: 'Erro interno no servidor' } }
+                properties: {
+                  success: { type: 'boolean', example: false },
+                  error: {
+                    type: 'object',
+                    properties: { code: { type: 'string', example: 'INTERNAL_ERROR' }, message: { type: 'string', example: 'Erro interno no servidor' }, statusCode: { type: 'integer', example: 500 } }
+                  }
+                }
               }
             }
           }
