@@ -35,7 +35,8 @@ describe('Math API - /funcao', () => {
 
   test('rejects an unsupported function as client input', async () => {
     const res = await request(app).post('/funcao/inexistente').send({ a: 2, b: 3 }).expect(400);
-    expect(res.body.error).toMatch(/Tipo/);
+    expect(res.body).toMatchObject({ success: false, error: { code: 'VALIDATION_ERROR', statusCode: 400 } });
+    expect(res.body.error.message).toMatch(/Tipo/);
   });
 
   test.each(['linear', 'quadratica'])('rejects an invalid x instead of solving %s', async tipo => {
