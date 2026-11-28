@@ -6,6 +6,9 @@ module.exports = {
         return `Variação = (p / 100) * v = (${p} / 100) * ${v} = ${decimal} * ${v} = ${value}`;
     },
     'variacao-percentual': ({ vi, vf } = {}) => {
+        if (vi === 0) {
+            throw new Error('O valor inicial deve ser diferente de zero.');
+        }
         const diferenca = vf - vi;
         const value = (diferenca/vi)*100;
         return `Variação Porcentual = (Valor Final - Valor Inicial) / Valor Inicial = (${vf} - ${vi}) / ${vi} = ${value/100} = ${value}%`;
