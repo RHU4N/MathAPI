@@ -15,10 +15,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
+          cache: npm
       - name: Install
-        run: npm ci
-      - name: Run tests
-        run: npm test -- --runInBand --silent
+        run: npm ci --no-audit --no-fund
+      - name: Run unit and HTTP contract tests
+        run: npm test -- --runInBand
 
   newman-math:
     name: Newman - mathApi
@@ -26,16 +27,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-
+          cache: npm
       - name: Install dependencies (mathApi)
-        run: |
-          npm ci --no-audit --no-fund
-
+        run: npm ci --no-audit --no-fund
       - name: Start mathApi server
         run: |
           touch server.log || true
@@ -49,23 +47,23 @@ jobs:
           done
           if [ $n -ge 30 ]; then
             echo "Server did not start in time"
-            echo "---- server.log ----"
             tail -n 60 ./server.log || true
             exit 1
           fi
-
       - name: Run Newman collection (math)
         run: |
           npm install newman --no-save
-          echo "---- server.log (head) ----"
-          head -n 20 ./server.log || true
           npx newman run postman/math.postman_collection.json -e postman/math.postman_environment.json --timeout-request 15000 --bail || {
-            echo "Newman failed; dumping server.log";
-            echo "---- server.log (full) ----";
-            tail -n 60 ./server.log || true;
-            exit 1;
+            echo "Newman failed; dumping server.log"
+            tail -n 60 ./server.log || true
+            exit 1
           }
-
+      - name: Upload server log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: math-newman-server-log
+          path: server.log
       - name: Stop server
         if: always()
         run: |
@@ -75,72 +73,58 @@ jobs:
           fi
 
   infra-tests:
-    name: Infra Tests - mathApi (start + Newman + smoke)
+    name: Infra Tests - mathApi (runtime HTTP smoke)
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-
+          cache: npm
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
-
       - name: Start mathApi server
         run: |
           touch server.log || true
           npm run start > ./server.log 2>&1 &
           echo $! > server.pid
-
-      - name: Wait for service (health check)
+      - name: Verify readiness and representative calculation endpoints
         run: |
           set -e
           for i in $(seq 1 30); do
             if curl -sfS http://localhost:8080/ >/dev/null 2>&1; then
-              echo "service is up"; exit 0
+              echo "service is up"; break
             fi
-            if curl -sfS http://localhost:8080/health >/dev/null 2>&1; then
-              echo "service is healthy"; exit 0
+            if [ "$i" -eq 30 ]; then
+              echo "::error::service did not become ready in time"
+              tail -n 60 ./server.log || true
+              exit 1
             fi
-            echo "waiting for service... ($i)"; sleep 2
+            sleep 1
           done
-          echo "::error::service did not become ready in time"
-          tail -n 60 ./server.log || true
-          exit 1
-
-      - name: Install Newman
-        run: npm install newman --no-save
-
-      - name: Run Newman collection (math)
-        run: |
-          echo "---- server.log (head) ----"
-          head -n 20 ./server.log || true
-          ./node_modules/.bin/newman run postman/math.postman_collection.json -e postman/math.postman_environment.json --timeout-request 15000 --bail || {
-            echo "Newman failed; dumping server.log";
-            echo "---- server.log (full) ----";
-            tail -n 60 ./server.log || true;
-            exit 1;
-          }
-
-      - name: Run extra infra checks (run-tests.js)
-        run: |
-          if [ -f run-tests.js ]; then
-            node run-tests.js || (echo "run-tests.js failed"; tail -n 60 ./server.log || true; exit 1)
-          else
-            echo "No run-tests.js present; skipping"
-          fi
-
+          node -e "
+            (async () => {
+              const r = await fetch('http://127.0.0.1:8080/estequiometria/balanceamento', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ equacao: 'H2 + O2 -> H2O' })
+              });
+              const j = await r.json();
+              if (r.status !== 200 || !j.success || j.data?.equacaoBalanceada !== '2 H2 + O2 -> 2 H2O') {
+                throw new Error('Unexpected smoke response: ' + JSON.stringify(j));
+              }
+              console.log('HTTP runtime smoke OK:', j.data.equacaoBalanceada);
+            })().catch((e) => { console.error(e); process.exit(1); });
+          "
       - name: Upload server log on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: math-server-log
           path: server.log
-
       - name: Stop server
         if: always()
         run: |

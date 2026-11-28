@@ -24,12 +24,13 @@ describe('Math API - /funcao', () => {
     expect(r1.body).toHaveProperty('data.tipo', 'quadratica');
     expect(r1.body).toHaveProperty('data.resultado');
 
-    // Solve quadratic (if API supports solving - adapt if necessary)
-    const solvePayload = { a: 1, b: -3, c: 2 }; // no x => may return raizes
-    const r2 = await request(app).post('/funcao/quadratica').send(solvePayload);
-    // Accept either 200 with raizes or 400/422 if API requires x; just assert we get JSON back
-    expect([200, 400, 422]).toContain(r2.status);
+    // Solve quadratic when x is omitted => returns delta and raizes
+    const solvePayload = { a: 1, b: -3, c: 2 };
+    const r2 = await request(app).post('/funcao/quadratica').send(solvePayload).expect(200);
     expect(r2.headers['content-type']).toMatch(/application\/json/);
+    expect(r2.body.success).toBe(true);
+    expect(r2.body.data.tipo).toBe('quadratica');
+    expect(r2.body.data.resultado).toEqual({ delta: 1, raizes: [1, 2] });
   });
 
   test('rejects an unsupported function as client input', async () => {
